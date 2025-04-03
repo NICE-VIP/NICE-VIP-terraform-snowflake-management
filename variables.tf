@@ -1,8 +1,8 @@
-variable "user_password" {
-  description = "Common password for all users"
-  type        = string
-  sensitive   = true
-}
+# variable "user_password" {
+#   description = "Common password for all users"
+#   type        = string
+#   sensitive   = true
+# }
 
 variable "user_emails" {
   description = "Map of user emails"

@@ -8,114 +8,234 @@ terraform {
 }
 
 provider "snowflake" {
-  role = "SECURITYADMIN"
+  role = "ACCOUNTADMIN"
+}
+# --- Create Three Custom Roles ---
+resource "snowflake_account_role" "infra_admin" {
+  name    = "INFRA_ADMIN_ROLE"
+  comment = "Infrastructure admin role with full privileges over warehouses and databases."
 }
 
-resource "snowflake_grant_account_role" "grants_jayesh" {
-  role_name = "SYSADMIN"
-  user_name = snowflake_user.user1.name
+resource "snowflake_grant_account_role" "infra_admin_grant" {
+  role_name = snowflake_account_role.infra_admin.name
+  parent_role_name = "SYSADMIN"
 }
 
-# Grant USERADMIN role to user2 (Anuj Joshi)
-resource "snowflake_grant_account_role" "grants_anuj" {
-  role_name = "USERADMIN"
-  user_name     = snowflake_user.user2.name
+resource "snowflake_account_role" "data_admin" {
+  name    = "DATA_ADMIN_ROLE"
+  comment = "Data admin role with full control over databases."
 }
 
-# Grant PUBLIC role to user4
-resource "snowflake_grant_account_role" "grants_shreenath" {
-  role_name = "PUBLIC"
-  user_name     = snowflake_user.user4.name
+resource "snowflake_grant_account_role" "data_admin_grant" {
+  role_name = snowflake_account_role.data_admin.name
+  parent_role_name = snowflake_account_role.infra_admin.name
 }
 
-# Grant multiple roles to user3
-resource "snowflake_grant_account_role" "grants_samir_sysadmin" {
-  role_name = "SYSADMIN"
-  user_name     = snowflake_user.user3.name
+resource "snowflake_account_role" "read_only" {
+  name    = "READ_ONLY_ROLE"
+  comment = "Read-only role with SELECT and USAGE privileges."
 }
 
-resource "snowflake_grant_account_role" "grants_samir_useradmin" {
-  role_name = "USERADMIN"
-  user_name     = snowflake_user.user3.name
+resource "snowflake_grant_account_role" "read_only_grant" {
+  role_name = snowflake_account_role.read_only.name
+  parent_role_name = snowflake_account_role.data_admin.name
 }
 
-# Create a custom role
-resource "snowflake_account_role" "analyst_role" {
-  name    = "ANALYST"
-  comment = "Role for data analysts"
+# --- Create Databases ---
+resource "snowflake_database" "app_data_db" {
+  name    = "APP_DATA_DB"
+  comment = "Database for application data."
 }
 
-# Grant the custom role to users
-resource "snowflake_grant_account_role" "analyst_grants_samir" {
-  role_name = snowflake_account_role.analyst_role.name
-  user_name = snowflake_user.user3.name
-}
-resource "snowflake_grant_account_role" "analyst_grants_shreenath" {
-  role_name = snowflake_account_role.analyst_role.name
-  user_name = snowflake_user.user4.name
+resource "snowflake_database" "logs_db" {
+  name    = "LOGS_DB"
+  comment = "Database for logging data."
 }
 
-resource "snowflake_user" "user1" {
-  name         = "Jayesh Soni"
-  login_name   = "jayesh_soni"
-
-  email = var.user_emails["jayesh_soni"]
-
-  password = var.user_password
-
-  first_name   = "Jayesh"
-  last_name    = "Soni"
-
-  comment      = "User created using the tf-snow user"
-  display_name = "Jayesh Soni"
-  must_change_password = "true"
-
+# Schema initialization
+resource "snowflake_schema" "app_data_db_schema" {
+  database = snowflake_database.app_data_db.name
+  name     = "APP_DATA_DB_SCHEMA"
+}
+resource "snowflake_schema" "logs_db_schema" {
+  database = snowflake_database.logs_db.name
+  name     = "LOGS_DB_SCHEMA"
 }
 
-resource "snowflake_user" "user2" {
-  name         = "Anuj Joshi"
-  login_name   = "anuj_joshi"
-
-  email = var.user_emails["anuj_joshi"]
-
-  password = var.user_password
-
-  first_name   = "Anuj"
-  last_name    = "Joshi"
-
-  comment      = "User created using the tf-snow user"
-  display_name = "Anuj Joshi"
-  must_change_password = "true"
+# Grant privileges to roles
+resource "snowflake_grant_ownership" "infra_admin_app_data_db_ownership" {
+  account_role_name = snowflake_account_role.infra_admin.name
+  on {
+    object_type = "DATABASE"
+    object_name = snowflake_database.app_data_db.name
+  }
+}
+resource "snowflake_grant_ownership" "infra_admin_logs_db_ownership" {
+  account_role_name = snowflake_account_role.infra_admin.name
+  on {
+    object_type = "DATABASE"
+    object_name = snowflake_database.logs_db.name
+  }
 }
 
-resource "snowflake_user" "user3" {
-  name         = "Samir Wankhede"
-  login_name   = "samir_wankhede"
-
-  email = var.user_emails["samir_wankhede"]
-  password = var.user_password
-
-  first_name   = "Samir"
-  last_name    = "Wankhede"
-
-  comment      = "User created using the tf-snow user"
-  display_name = "Samir Wankhede"
-  must_change_password = "true"
-
+resource "snowflake_grant_privileges_to_account_role" "data_admin_app_data_db_schema_privs" {
+  account_role_name = snowflake_account_role.data_admin.name
+  privileges    = ["MODIFY", "USAGE"]
+  on_schema {
+    schema_name = snowflake_schema.app_data_db_schema.fully_qualified_name
+  }
 }
 
-resource "snowflake_user" "user4" {
-  name         = "Shreenath Bandivadekar"
-  login_name   = "shreenath_bandivadekar"
+resource "snowflake_grant_privileges_to_account_role" "data_admin_app_data_db_schema_object_privs" {
+  account_role_name = snowflake_account_role.data_admin.name
+  privileges    = ["INSERT", "UPDATE", "DELETE", "SELECT"]
+  on_schema_object {
+    all {
+      object_type_plural = "TABLES"
+      in_schema = snowflake_schema.app_data_db_schema.fully_qualified_name
+    }
+  }
+}
 
-  email = var.user_emails["shreenath_bandivadekar"]
-  password = var.user_password
+resource "snowflake_grant_privileges_to_account_role" "data_admin_logs_db_schema_privs" {
+  account_role_name = snowflake_account_role.data_admin.name
+  privileges    = ["MODIFY", "USAGE"]
+  on_schema {
+    schema_name = snowflake_schema.logs_db_schema.fully_qualified_name
+  }
+}
 
-  first_name   = "Shreenath"
-  last_name    = "Bandivadekar"
+resource "snowflake_grant_privileges_to_account_role" "data_admin_logs_db_schema_object_privs" {
+  account_role_name = snowflake_account_role.data_admin.name
+  privileges    = ["INSERT", "UPDATE", "DELETE", "SELECT"]
+  on_schema_object {
+    all {
+      object_type_plural = "TABLES"
+      in_schema = snowflake_schema.logs_db_schema.fully_qualified_name
+    }
+  }
+}
 
-  comment      = "User created using the tf-snow user"
-  display_name = "Shreenath Bandivadekar"
-  must_change_password = "true"
+resource "snowflake_grant_privileges_to_account_role" "read_only_app_data_db_schema_privs" {
+  account_role_name = snowflake_account_role.read_only.name
+  privileges    = ["USAGE"]
+  on_schema {
+    schema_name = snowflake_schema.app_data_db_schema.fully_qualified_name
+  }
+}
 
+resource "snowflake_grant_privileges_to_account_role" "read_only_app_data_db_schema_object_privs" {
+  account_role_name = snowflake_account_role.read_only.name
+  privileges    = ["SELECT"]
+  on_schema_object {
+    all {
+      object_type_plural = "TABLES"
+      in_schema = snowflake_schema.app_data_db_schema.fully_qualified_name
+    }
+  }
+}
+
+resource "snowflake_grant_privileges_to_account_role" "read_only_logs_db_schema_privs" {
+  account_role_name = snowflake_account_role.read_only.name
+  privileges    = ["USAGE"]
+  on_schema {
+    schema_name = snowflake_schema.logs_db_schema.fully_qualified_name
+  }
+}
+
+resource "snowflake_grant_privileges_to_account_role" "read_only_logs_db_schema_object_privs" {
+  account_role_name = snowflake_account_role.read_only.name
+  privileges    = ["SELECT"]
+  on_schema_object {
+    all {
+      object_type_plural = "TABLES"
+      in_schema = snowflake_schema.logs_db_schema.fully_qualified_name
+    }
+  }
+}
+
+# --- Create Warehouses ---
+resource "snowflake_warehouse" "data_processing_wh" {
+  name                   = "DATA_PROCESSING_WH"
+  warehouse_size         = "XSMALL"
+  auto_suspend           = 60
+  auto_resume            = true
+  min_cluster_count      = 1
+  max_cluster_count      = 10
+  scaling_policy         = "STANDARD"
+  initially_suspended    = true
+  resource_monitor       = snowflake_resource_monitor.warehouse_usage_monitor.name
+}
+
+resource "snowflake_warehouse" "logs_processing_wh" {
+  name                   = "LOGS_PROCESSING_WH"
+  warehouse_size         = "XSMALL"
+  auto_suspend           = 60
+  auto_resume            = true
+  min_cluster_count      = 1
+  max_cluster_count      = 10
+  scaling_policy         = "STANDARD"
+  initially_suspended    = true
+  resource_monitor       = snowflake_resource_monitor.warehouse_usage_monitor.name
+}
+
+# Ownership to Infra Admin
+resource "snowflake_grant_ownership" "infra_admin_data_processing_wh_ownership" {
+  account_role_name = snowflake_account_role.infra_admin.name
+  on {
+    object_type = "WAREHOUSE"
+    object_name = snowflake_warehouse.data_processing_wh.name
+  }
+}
+resource "snowflake_grant_ownership" "infra_admin_logs_processing_wh_ownership" {
+  account_role_name = snowflake_account_role.infra_admin.name
+  on {
+    object_type = "WAREHOUSE"
+    object_name = snowflake_warehouse.logs_processing_wh.name
+  }
+}
+
+# Grant USAGE on warehouses
+resource "snowflake_grant_privileges_to_account_role" "data_admin_data_processing_wh_privs" {
+  account_role_name = snowflake_account_role.data_admin.name
+  privileges     = ["USAGE"]
+  on_account_object {
+    object_type = "WAREHOUSE"
+    object_name = snowflake_warehouse.data_processing_wh.name
+  }
+}
+
+resource "snowflake_grant_privileges_to_account_role" "data_admin_logs_processing_wh_privs" {
+  account_role_name = snowflake_account_role.read_only.name
+  privileges     = ["USAGE"]
+  on_account_object {
+    object_type = "WAREHOUSE"
+    object_name = snowflake_warehouse.logs_processing_wh.name
+  }
+}
+
+# --- 4. Create Network Policy ---
+resource "snowflake_network_policy" "allow_ip_network_policy" {
+  name                      = "ALLOW_IP"
+  allowed_ip_list           = ["0.0.0.0/0"]
+  comment                   = "my network policy"
+}
+
+# --- Create Resource Monitors ---
+resource "snowflake_resource_monitor" "account_usage_monitor" {
+  name                     = "ACCOUNT_USAGE_MONITOR"
+  credit_quota             = 100
+  notify_triggers          = [80]
+  suspend_trigger          = 90
+  suspend_immediate_trigger = 90
+  notify_users             = ["SAMIRWANKHEDE"]
+}
+
+resource "snowflake_resource_monitor" "warehouse_usage_monitor" {
+  name                     = "WAREHOUSE_USAGE_MONITOR"
+  credit_quota             = 100
+  notify_triggers          = [80]
+  suspend_trigger         = 90
+  suspend_immediate_trigger = 90
+  notify_users             = ["SAMIRWANKHEDE"]
 }
