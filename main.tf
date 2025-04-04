@@ -83,6 +83,8 @@ resource "snowflake_grant_account_role" "assign_data_admin_to_infra" {
 #   }
 # }
 
+# for data admin role
+
 
 resource "snowflake_grant_privileges_to_account_role" "app_db_schema_usage" {
   provider            = snowflake.infra_admin_alias
@@ -127,5 +129,64 @@ resource "snowflake_grant_privileges_to_account_role" "logs_db_tables_usage" {
       object_type_plural = "TABLES"
       in_schema          = "${snowflake_database.logs_db.name}.PUBLIC"
     }
+  }
+}
+
+
+# read only role
+
+resource "snowflake_account_role" "read_only"{
+    provider = snowflake.infra_admin_alias
+    name = "READ_ONLY_ROLE"
+}
+
+resource "snowflake_grant_account_role" "assign_read_only_to_data_admin" {
+  role_name        = snowflake_account_role.read_only.name
+  parent_role_name = snowflake_account_role.data_admin.name
+}
+
+
+resource "snowflake_grant_privileges_to_account_role" "app_db_tables_usage_by_read_only" {
+  provider          = snowflake.infra_admin_alias
+  privileges        = ["SELECT", "INSERT", "UPDATE", "DELETE"] // Modify??
+  account_role_name   = snowflake_account_role.read_only.name
+  on_schema_object {
+    future {
+      object_type_plural = "TABLES"
+      in_schema          = "${snowflake_database.app_data_db.name}.PUBLIC"
+    }
+  }
+}
+
+
+
+resource "snowflake_grant_privileges_to_account_role" "logs_db_tables_usage_by_read_only" {
+  provider          = snowflake.infra_admin_alias
+  privileges        = ["SELECT", "INSERT", "UPDATE", "DELETE"] // Modify??
+  account_role_name   = snowflake_account_role.read_only.name
+  on_schema_object {
+    future {
+      object_type_plural = "TABLES"
+      in_schema          = "${snowflake_database.logs_db.name}.PUBLIC"
+    }
+  }
+}
+
+
+resource "snowflake_grant_privileges_to_account_role" "app_db_schema_usage_by_read_only" {
+  provider            = snowflake.infra_admin_alias
+  account_role_name   = snowflake_account_role.read_only.name
+  privileges          = ["USAGE"]
+  on_schema {
+    schema_name   = "${snowflake_database.app_data_db.name}.PUBLIC"
+  }
+}
+
+resource "snowflake_grant_privileges_to_account_role" "logs_db_schema_usage_by_read_only" {
+  provider            = snowflake.infra_admin_alias
+  account_role_name   = snowflake_account_role.read_only.name
+  privileges          = ["USAGE"]
+  on_schema {
+    schema_name   = "${snowflake_database.logs_db.name}.PUBLIC"
   }
 }
