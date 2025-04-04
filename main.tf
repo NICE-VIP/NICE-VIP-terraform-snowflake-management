@@ -32,6 +32,13 @@ provider "snowflake" {
   account_name      = var.account_name
 }
 
+provider "snowflake" {
+  alias             = "account_admin"
+  role              = "ACCOUNTADMIN"
+  organization_name = var.org_name
+  account_name      = var.account_name
+}
+
 resource "snowflake_account_role" "infra_admin" {
   provider = snowflake.security_admin
   name     = "INFRA_ADMIN_ROLE"
@@ -259,3 +266,15 @@ resource "snowflake_grant_privileges_to_account_role" "grant_logs_processing_usa
 
   }
 }
+
+
+# network policy
+
+resource "snowflake_network_policy" "network_policy_allow_ip" {
+  provider = snowflake.account_admin
+  name                      = "ALLOW_IP"
+  allowed_ip_list           = ["0.0.0.0/0"]
+  comment                   = "A network policy"
+}
+
+
