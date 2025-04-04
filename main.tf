@@ -62,3 +62,70 @@ resource "snowflake_database" "logs_db" {
   name = "LOGS_DB"
   comment = "This database holds all of the log data."
 }
+
+resource "snowflake_account_role" "data_admin"{
+    provider = snowflake.infra_admin_alias
+    name = "DATA_ADMIN_ROLE"
+}
+
+resource "snowflake_grant_account_role" "assign_data_admin_to_infra" {
+  role_name        = snowflake_account_role.data_admin.name
+  parent_role_name = snowflake_account_role.infra_admin.name
+}
+
+
+# resource "snowflake_grant_privileges_to_account_role" "app_db_schema_privs" {
+#   provider            = snowflake.infra_admin_alias
+#   account_role_name   = snowflake_account_role.data_admin.name
+#   privileges          = ["USAGE", "SELECT", "INSERT", "UPDATE", "DELETE", "MODIFY"]
+#   on_schema {
+#     schema_name = "${snowflake_database.app_data_db.name}.PUBLIC"
+#   }
+# }
+
+
+resource "snowflake_grant_privileges_to_account_role" "app_db_schema_usage" {
+  provider            = snowflake.infra_admin_alias
+  account_role_name   = snowflake_account_role.data_admin.name
+  privileges          = ["USAGE"]
+  on_schema {
+    schema_name   = "${snowflake_database.app_data_db.name}.PUBLIC"
+  }
+}
+
+
+
+resource "snowflake_grant_privileges_to_account_role" "app_db_tables_usage" {
+  provider          = snowflake.infra_admin_alias
+  privileges        = ["SELECT", "INSERT", "UPDATE", "DELETE"] // Modify??
+  account_role_name   = snowflake_account_role.data_admin.name
+  on_schema_object {
+    future {
+      object_type_plural = "TABLES"
+      in_schema          = "${snowflake_database.app_data_db.name}.PUBLIC"
+    }
+  }
+}
+
+
+resource "snowflake_grant_privileges_to_account_role" "logs_db_schema_usage" {
+  provider            = snowflake.infra_admin_alias
+  account_role_name   = snowflake_account_role.data_admin.name
+  privileges          = ["USAGE"]
+  on_schema {
+    schema_name   = "${snowflake_database.logs_db.name}.PUBLIC"
+  }
+}
+
+
+resource "snowflake_grant_privileges_to_account_role" "logs_db_tables_usage" {
+  provider          = snowflake.infra_admin_alias
+  privileges        = ["SELECT", "INSERT", "UPDATE", "DELETE"] // Modify??
+  account_role_name   = snowflake_account_role.data_admin.name
+  on_schema_object {
+    future {
+      object_type_plural = "TABLES"
+      in_schema          = "${snowflake_database.logs_db.name}.PUBLIC"
+    }
+  }
+}
