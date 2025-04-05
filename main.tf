@@ -78,11 +78,12 @@ resource "snowflake_grant_ownership" "infra_admin_logs_db_ownership" {
   }
 }
 
-resource "snowflake_grant_privileges_to_account_role" "data_admin_app_data_db_schema_privs" {
+resource "snowflake_grant_privileges_to_account_role" "data_admin_app_data_db_privs" {
   account_role_name = snowflake_account_role.data_admin.name
   privileges    = ["MODIFY", "USAGE"]
-  on_schema {
-    schema_name = snowflake_schema.app_data_db_schema.fully_qualified_name
+  on_account_object {
+    object_type = "DATABASE"
+    object_name = snowflake_database.app_data_db.name
   }
 }
 
@@ -97,11 +98,12 @@ resource "snowflake_grant_privileges_to_account_role" "data_admin_app_data_db_sc
   }
 }
 
-resource "snowflake_grant_privileges_to_account_role" "data_admin_logs_db_schema_privs" {
+resource "snowflake_grant_privileges_to_account_role" "data_admin_logs_db_privs" {
   account_role_name = snowflake_account_role.data_admin.name
   privileges    = ["MODIFY", "USAGE"]
-  on_schema {
-    schema_name = snowflake_schema.logs_db_schema.fully_qualified_name
+  on_account_object {
+    object_type = "DATABASE"
+    object_name = snowflake_database.logs_db.name
   }
 }
 
@@ -116,11 +118,12 @@ resource "snowflake_grant_privileges_to_account_role" "data_admin_logs_db_schema
   }
 }
 
-resource "snowflake_grant_privileges_to_account_role" "read_only_app_data_db_schema_privs" {
+resource "snowflake_grant_privileges_to_account_role" "read_only_app_data_db_privs" {
   account_role_name = snowflake_account_role.read_only.name
   privileges    = ["USAGE"]
-  on_schema {
-    schema_name = snowflake_schema.app_data_db_schema.fully_qualified_name
+  on_account_object {
+    object_type = "DATABASE"
+    object_name = snowflake_database.app_data_db.name
   }
 }
 
@@ -135,11 +138,12 @@ resource "snowflake_grant_privileges_to_account_role" "read_only_app_data_db_sch
   }
 }
 
-resource "snowflake_grant_privileges_to_account_role" "read_only_logs_db_schema_privs" {
+resource "snowflake_grant_privileges_to_account_role" "read_only_logs_db_privs" {
   account_role_name = snowflake_account_role.read_only.name
   privileges    = ["USAGE"]
-  on_schema {
-    schema_name = snowflake_schema.logs_db_schema.fully_qualified_name
+  on_account_object {
+    object_type = "DATABASE"
+    object_name = snowflake_database.logs_db.name
   }
 }
 
