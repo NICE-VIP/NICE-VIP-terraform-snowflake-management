@@ -63,3 +63,10 @@ module "network_policy" {
     snowflake.accountadmin = snowflake.accountadmin
   }
 }
+
+module "resource_monitors" {
+  source = "./modules/resource_monitors"
+  providers = {
+    snowflake.accountadmin = snowflake.accountadmin
+  }
+}
