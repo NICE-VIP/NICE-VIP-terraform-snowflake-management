@@ -25,6 +25,7 @@ provider "snowflake" {
 
 provider "snowflake" {
   alias  = "infra_admin"
+  role   = "INFRA_ADMIN_ROLE"
 }
 
 module "roles" {
