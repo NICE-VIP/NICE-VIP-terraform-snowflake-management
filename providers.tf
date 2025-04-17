@@ -16,6 +16,7 @@ provider "snowflake" {
   role              = "SECURITYADMIN"
   organization_name = var.org_name
   account_name      = var.account_name
+  warehouse = "DATA_PROCESSING_WH"
 }
 
 provider "snowflake" {
