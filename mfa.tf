@@ -11,7 +11,25 @@ resource "snowflake_authentication_policy" "mfa_on_db_app" {
 }
 
 resource "snowflake_user_authentication_policy_attachment" "auth_policy_for_user" {
-    provider = snowflake.security_admin
+  provider = snowflake.security_admin
   authentication_policy_name = "${snowflake_authentication_policy.mfa_on_db_app.database}.${snowflake_authentication_policy.mfa_on_db_app.schema}.${snowflake_authentication_policy.mfa_on_db_app.name}"
   user_name                  = "Shreenath Bandivadekar"
+}
+
+resource "snowflake_user_authentication_policy_attachment" "auth_policy_for_user_samir" {
+  provider = snowflake.security_admin
+  authentication_policy_name = "${snowflake_authentication_policy.mfa_on_db_app.database}.${snowflake_authentication_policy.mfa_on_db_app.schema}.${snowflake_authentication_policy.mfa_on_db_app.name}"
+  user_name                  = "Samir Wankhede"
+}
+
+resource "snowflake_user_authentication_policy_attachment" "auth_policy_for_user_anuj" {
+  provider = snowflake.security_admin
+  authentication_policy_name = "${snowflake_authentication_policy.mfa_on_db_app.database}.${snowflake_authentication_policy.mfa_on_db_app.schema}.${snowflake_authentication_policy.mfa_on_db_app.name}"
+  user_name                  = "Anuj Joshi"
+}
+
+resource "snowflake_user_authentication_policy_attachment" "auth_policy_for_user_jayesh" {
+  provider = snowflake.security_admin
+  authentication_policy_name = "${snowflake_authentication_policy.mfa_on_db_app.database}.${snowflake_authentication_policy.mfa_on_db_app.schema}.${snowflake_authentication_policy.mfa_on_db_app.name}"
+  user_name                  = "Jayesh Soni"
 }
