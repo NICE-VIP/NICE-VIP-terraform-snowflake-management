@@ -12,8 +12,7 @@ jobs:
       SNOWFLAKE_ORGANIZATION_NAME: ${{ secrets.SNOWFLAKE_ORGANIZATION_NAME }}
       SNOWFLAKE_ACCOUNT_NAME: ${{ secrets.SNOWFLAKE_ACCOUNT_NAME }}
       SNOWFLAKE_USER: ${{ secrets.SNOWFLAKE_USER }}
-      SNOWFLAKE_AUTHENTICATOR: ${{ secrets.SNOWFLAKE_AUTHENTICATOR }}
-      SNOWFLAKE_PRIVATE_KEY: ${{ secrets.SNOWFLAKE_PRIVATE_KEY }}
+      SNOWFLAKE_PASSWORD: ${{ secrets.SNOWFLAKE_PASSWORD }}
       TF_CLOUD_ORGANIZATION: "nice-vip"
       TF_TOKEN_app_terraform_io: ${{ secrets.TF_API_TOKEN }}
       TF_WORKSPACE: "nice-vip-assignment-1" 
