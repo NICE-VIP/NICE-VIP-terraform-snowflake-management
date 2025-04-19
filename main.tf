@@ -71,3 +71,10 @@ module "warehouses" {
     snowflake.infra_admin = snowflake.infra_admin
   }
 }
+
+module "network_policy" {
+  source = "./modules/network_policy"
+  providers = {
+    snowflake.accountadmin = snowflake.accountadmin
+  }
+}
