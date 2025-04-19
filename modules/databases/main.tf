@@ -37,52 +37,52 @@ resource "snowflake_schema" "schemas" {
   name     = each.value.schema
 }
 
-# # Grant privileges to data_admin
-# resource "snowflake_grant_privileges_to_account_role" "data_admin_db_privs" {
-#   for_each = local.databases
-#   provider          = snowflake.infra_admin
-#   account_role_name = var.data_admin_role
-#   privileges        = ["MODIFY", "USAGE"]
-#   on_account_object {
-#     object_type = "DATABASE"
-#     object_name = each.key
-#   }
-# }
+# Grant privileges to data_admin
+resource "snowflake_grant_privileges_to_account_role" "data_admin_db_privs" {
+  for_each = local.databases
+  provider          = snowflake.infra_admin
+  account_role_name = var.data_admin_role
+  privileges        = ["MODIFY", "USAGE"]
+  on_account_object {
+    object_type = "DATABASE"
+    object_name = each.key
+  }
+}
 
-# resource "snowflake_grant_privileges_to_account_role" "data_admin_schema_object_privs" {
-#   for_each = local.databases
-#   provider          = snowflake.infra_admin
-#   account_role_name = var.data_admin_role
-#   privileges        = ["INSERT", "UPDATE", "DELETE", "SELECT"]
-#   on_schema_object {
-#     all {
-#       object_type_plural = "TABLES"
-#       in_schema = snowflake_schema.schemas[each.key].fully_qualified_name
-#     }
-#   }
-# }
+resource "snowflake_grant_privileges_to_account_role" "data_admin_schema_object_privs" {
+  for_each = local.databases
+  provider          = snowflake.infra_admin
+  account_role_name = var.data_admin_role
+  privileges        = ["INSERT", "UPDATE", "DELETE", "SELECT"]
+  on_schema_object {
+    all {
+      object_type_plural = "TABLES"
+      in_schema = snowflake_schema.schemas[each.key].fully_qualified_name
+    }
+  }
+}
 
-# # Grant privileges to read_only
-# resource "snowflake_grant_privileges_to_account_role" "read_only_db_privs" {
-#   for_each = local.databases
-#   provider          = snowflake.infra_admin
-#   account_role_name = var.read_only_role
-#   privileges        = ["USAGE"]
-#   on_account_object {
-#     object_type = "DATABASE"
-#     object_name = each.key
-#   }
-# }
+# Grant privileges to read_only
+resource "snowflake_grant_privileges_to_account_role" "read_only_db_privs" {
+  for_each = local.databases
+  provider          = snowflake.infra_admin
+  account_role_name = var.read_only_role
+  privileges        = ["USAGE"]
+  on_account_object {
+    object_type = "DATABASE"
+    object_name = each.key
+  }
+}
 
-# resource "snowflake_grant_privileges_to_account_role" "read_only_schema_object_privs" {
-#   for_each = local.databases
-#   provider          = snowflake.infra_admin
-#   account_role_name = var.read_only_role
-#   privileges        = ["SELECT"]
-#   on_schema_object {
-#     all {
-#       object_type_plural = "TABLES"
-#       in_schema = snowflake_schema.schemas[each.key].fully_qualified_name
-#     }
-#   }
-# }
+resource "snowflake_grant_privileges_to_account_role" "read_only_schema_object_privs" {
+  for_each = local.databases
+  provider          = snowflake.infra_admin
+  account_role_name = var.read_only_role
+  privileges        = ["SELECT"]
+  on_schema_object {
+    all {
+      object_type_plural = "TABLES"
+      in_schema = snowflake_schema.schemas[each.key].fully_qualified_name
+    }
+  }
+}
