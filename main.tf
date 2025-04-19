@@ -5,6 +5,12 @@ terraform {
       version = "~> 0.87"
     }
   }
+  cloud { 
+    organization = "nice-vip" 
+    workspaces { 
+      name = "nice-vip-assignment-1" 
+    } 
+  } 
 }
 
 provider "snowflake" {
