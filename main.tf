@@ -62,3 +62,12 @@ module "databases" {
     snowflake.infra_admin = snowflake.infra_admin
   }
 }
+
+module "warehouses" {
+  source = "./modules/warehouses"
+  read_only_role = "READ_ONLY_ROLE"
+  data_admin_role = "DATA_ADMIN_ROLE"
+  providers = {
+    snowflake.infra_admin = snowflake.infra_admin
+  }
+}
