@@ -27,7 +27,7 @@ module "roles" {
   source = "./modules/roles"
 
   providers = {
-    snowflake.sysadmin       = snowflake.sysadmin
+    snowflake.sysadmin      = snowflake.sysadmin
     snowflake.security_admin = snowflake.security_admin
   }
 }
