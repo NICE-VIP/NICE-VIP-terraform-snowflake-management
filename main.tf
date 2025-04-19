@@ -30,10 +30,6 @@ provider "snowflake" {
   role   = "SECURITYADMIN"
 }
 
-provider "snowflake" {
-  alias  = "infra_admin"
-  role   = "INFRA_ADMIN_ROLE"
-}
 
 module "roles" {
   source = "./modules/roles"
@@ -41,6 +37,5 @@ module "roles" {
   providers = {
     snowflake.sysadmin       = snowflake.sysadmin
     snowflake.security_admin = snowflake.security_admin
-    snowflake.infra_admin    = snowflake.infra_admin
   }
 }
