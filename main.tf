@@ -34,11 +34,21 @@ provider "snowflake" {
   password          = var.snowflake_password
 }
 
+provider "snowflake" {
+  alias  = "infra_admin"
+  role   = "INFRA_ADMIN_ROLE"
+  account_name      = var.snowflake_account_name
+  organization_name = var.snowflake_organization_name
+  user              = var.snowflake_user
+  password          = var.snowflake_password
+}
+
 module "roles" {
   source = "./modules/roles"
 
   providers = {
     snowflake.sysadmin       = snowflake.sysadmin
     snowflake.security_admin = snowflake.security_admin
+    snowflake.infra_admin    = snowflake.infra_admin
   }
 }
