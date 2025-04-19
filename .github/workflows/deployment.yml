@@ -27,6 +27,11 @@ jobs:
         with:
           terraform_version: 1.6.6
 
+      - name: Decode Snowflake private key
+        run: |
+          echo "$SNOWFLAKE_PRIVATE_KEY" | base64 -d > snowflake_rsa_key.p8
+          chmod 600 snowflake_rsa_key.p8
+
       - name: Terraform Init
         run: terraform init
 
