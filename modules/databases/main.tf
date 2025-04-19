@@ -8,34 +8,34 @@ terraform {
   }
 }
 
-# # Locals for reuse
-# locals {
-#   databases = {
-#     APP_DATA_DB = {
-#       comment = "Database for application data."
-#       schema  = "APP_DATA_DB_SCHEMA"
-#     }
-#     LOGS_DB = {
-#       comment = "Database for logging data."
-#       schema  = "LOGS_DB_SCHEMA"
-#     }
-#   }
-# }
+# Locals for reuse
+locals {
+  databases = {
+    APP_DATA_DB = {
+      comment = "Database for application data."
+      schema  = "APP_DATA_DB_SCHEMA"
+    }
+    LOGS_DB = {
+      comment = "Database for logging data."
+      schema  = "LOGS_DB_SCHEMA"
+    }
+  }
+}
 
-# # Create Databases and Schemas
-# resource "snowflake_database" "dbs" {
-#   provider = snowflake.infra_admin
-#   for_each = local.databases
-#   name     = each.key
-#   comment  = each.value.comment
-# }
+# Create Databases and Schemas
+resource "snowflake_database" "dbs" {
+  provider = snowflake.infra_admin
+  for_each = local.databases
+  name     = each.key
+  comment  = each.value.comment
+}
 
-# resource "snowflake_schema" "schemas" {
-#   provider = snowflake.infra_admin
-#   for_each = local.databases
-#   database = each.key
-#   name     = each.value.schema
-# }
+resource "snowflake_schema" "schemas" {
+  provider = snowflake.infra_admin
+  for_each = local.databases
+  database = each.key
+  name     = each.value.schema
+}
 
 # # Grant privileges to data_admin
 # resource "snowflake_grant_privileges_to_account_role" "data_admin_db_privs" {
