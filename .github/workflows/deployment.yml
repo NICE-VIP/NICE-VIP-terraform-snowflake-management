@@ -13,7 +13,8 @@ jobs:
       SNOWFLAKE_ACCOUNT_NAME: ${{ secrets.SNOWFLAKE_ACCOUNT_NAME }}
       SNOWFLAKE_USER: ${{ secrets.SNOWFLAKE_USER }}
       SNOWFLAKE_AUTHENTICATOR: ${{ secrets.SNOWFLAKE_AUTHENTICATOR }}
-      SNOWFLAKE_PRIVATE_KEY: ${{ secrets.SNOWFLAKE_PRIVATE_KEY }}
+      SNOWFLAKE_PRIVATE_KEY_FILE: ${{ secrets.SNOWFLAKE_PRIVATE_KEY_FILE }}
+      SNOWFLAKE_PRIVATE_KEY: "`cat snowflake_rsa_key.p8`"
       TF_CLOUD_ORGANIZATION: "nice-vip"
       TF_TOKEN_app_terraform_io: ${{ secrets.TF_API_TOKEN }}
       TF_WORKSPACE: "nice-vip-assignment-1" 
@@ -29,7 +30,7 @@ jobs:
 
       - name: Decode Snowflake private key
         run: |
-          echo "$SNOWFLAKE_PRIVATE_KEY" | base64 -d > snowflake_rsa_key.p8
+          echo "$SNOWFLAKE_PRIVATE_KEY_FILE" | base64 -d > snowflake_rsa_key.p8
           chmod 600 snowflake_rsa_key.p8
 
       - name: Terraform Init
