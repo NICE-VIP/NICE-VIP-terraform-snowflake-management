@@ -14,6 +14,8 @@ provider "snowflake" {
   organization_name = var.snowflake_organization_name
   user              = var.snowflake_user
   password          = var.snowflake_password
+  authenticator = "USERNAMEPASSWORDMFA"
+  passcode = var.snowflake_passcode
 }
 
 provider "snowflake" {
