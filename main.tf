@@ -14,8 +14,15 @@ provider "snowflake" {
   organization_name = var.snowflake_organization_name
   user              = var.snowflake_user
   password          = var.snowflake_password
-  authenticator = "USERNAMEPASSWORDMFA"
-  passcode = var.snowflake_passcode
+}
+
+provider "snowflake" {
+  alias      = "accountadmin_2"
+  role       = "ACCOUNTADMIN"
+  account_name      = var.snowflake_account_name_2
+  organization_name = var.snowflake_organization_name_2
+  user              = var.snowflake_user_2
+  password          = var.snowflake_password_2
 }
 
 provider "snowflake" {
@@ -78,6 +85,13 @@ module "network_policy" {
   source = "./modules/network_policy"
   providers = {
     snowflake.accountadmin = snowflake.accountadmin
+  }
+}
+
+module "network_policy_2" {
+  source = "./modules/network_policy"
+  providers = {
+    snowflake.accountadmin = snowflake.accountadmin_2
   }
 }
 
