@@ -8,9 +8,9 @@ terraform {
   }
 }
 
-# resource "snowflake_network_policy" "allow_all" {
-#   name     = "ALLOW_IP"
-#   provider = snowflake.accountadmin 
-#   allowed_ip_list = ["0.0.0.0/0"]
-#   comment  = "Allow all IPs (for testing only)"
-# }
+resource "snowflake_network_policy" "allow_all" {
+  name     = "ALLOW_IP"
+  provider = snowflake.accountadmin 
+  allowed_ip_list = ["0.0.0.0/0"]
+  comment  = "Allow all IPs (for testing only)"
+}
