@@ -7,6 +7,7 @@ on:
 
 jobs:
   terraform-plan:
+    name: Terraform Plan
     runs-on: ubuntu-latest
     env:
       TF_VAR_snowflake_organization_name: ${{ secrets.SNOWFLAKE_ORGANIZATION_NAME }}
@@ -18,7 +19,6 @@ jobs:
       TF_VAR_snowflake_account_name_2: ${{ secrets.SNOWFLAKE_ACCOUNT_NAME_2 }}
       TF_VAR_snowflake_user_2: ${{ secrets.SNOWFLAKE_USER_2 }}
       TF_VAR_snowflake_password_2: ${{ secrets.SNOWFLAKE_PASSWORD_2 }}
-
 
       TF_CLOUD_ORGANIZATION: "nice-vip"
       TF_TOKEN_app_terraform_io: ${{ secrets.TF_API_TOKEN }}
@@ -33,26 +33,9 @@ jobs:
         with:
           terraform_version: 1.11.4
 
-      - name: Terraform Init for Account 1
-        run: terraform init
+      - name: Terraform Init
+        run: terraform init 
 
-      - name: Terraform Plan for Account 1
-        run: |
-          terraform plan \
-            -var="snowflake_account_name=${{ secrets.SNOWFLAKE_ACCOUNT_NAME }}" \
-            -var="snowflake_user=${{ secrets.SNOWFLAKE_USER }}" \
-            -var="snowflake_password=${{ secrets.SNOWFLAKE_PASSWORD }}" \
-            -var="snowflake_organization_name=${{ secrets.SNOWFLAKE_ORGANIZATION_NAME }}" \
-            -out=tfplan_account1.out
-
-      - name: Terraform Init for Account 2
-        run: terraform init
-
-      - name: Terraform Plan for Account 2
-        run: |
-          terraform plan \
-            -var="snowflake_account_name=${{ secrets.SNOWFLAKE_ACCOUNT_NAME_2 }}" \
-            -var="snowflake_user=${{ secrets.SNOWFLAKE_USER_2 }}" \
-            -var="snowflake_password=${{ secrets.SNOWFLAKE_PASSWORD_2 }}" \
-            -var="snowflake_organization_name=${{ secrets.SNOWFLAKE_ORGANIZATION_NAME_2 }}" \
-            -out=tfplan_account2.out
+      - name: Terraform Plan 
+        run: terraform plan
+          
