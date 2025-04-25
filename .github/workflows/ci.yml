@@ -6,50 +6,23 @@ on:
       - main
 
 jobs:
-  terraform-plan-account1:
-    name: Terraform Plan - Account 1
+  terraform-plan:
+    name: Terraform Plan
     runs-on: ubuntu-latest
     env:
       TF_VAR_snowflake_organization_name: ${{ secrets.SNOWFLAKE_ORGANIZATION_NAME }}
       TF_VAR_snowflake_account_name: ${{ secrets.SNOWFLAKE_ACCOUNT_NAME }}
       TF_VAR_snowflake_user: ${{ secrets.SNOWFLAKE_USER }}
       TF_VAR_snowflake_password: ${{ secrets.SNOWFLAKE_PASSWORD }}
-      TF_CLOUD_ORGANIZATION: "nice-vip"
-      TF_TOKEN_app_terraform_io: ${{ secrets.TF_API_TOKEN }}
-      TF_WORKSPACE: "nice-vip-assignment-1"  # Workspace specific to Account 1
 
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-
-      - name: Set up Terraform
-        uses: hashicorp/setup-terraform@v2
-        with:
-          terraform_version: 1.11.4
-
-      - name: Terraform Init for Account 1
-        run: terraform init
-
-      - name: Terraform Plan for Account 1
-        run: |
-          terraform plan \
-            -var="snowflake_account_name=${{ secrets.SNOWFLAKE_ACCOUNT_NAME }}" \
-            -var="snowflake_user=${{ secrets.SNOWFLAKE_USER }}" \
-            -var="snowflake_password=${{ secrets.SNOWFLAKE_PASSWORD }}" \
-            -var="snowflake_organization_name=${{ secrets.SNOWFLAKE_ORGANIZATION_NAME }}" \
-            -out=tfplan_account1.out
-
-  terraform-plan-account2:
-    name: Terraform Plan - Account 2
-    runs-on: ubuntu-latest
-    env:
       TF_VAR_snowflake_organization_name_2: ${{ secrets.SNOWFLAKE_ORGANIZATION_NAME_2 }}
       TF_VAR_snowflake_account_name_2: ${{ secrets.SNOWFLAKE_ACCOUNT_NAME_2 }}
       TF_VAR_snowflake_user_2: ${{ secrets.SNOWFLAKE_USER_2 }}
       TF_VAR_snowflake_password_2: ${{ secrets.SNOWFLAKE_PASSWORD_2 }}
+
       TF_CLOUD_ORGANIZATION: "nice-vip"
       TF_TOKEN_app_terraform_io: ${{ secrets.TF_API_TOKEN }}
-      TF_WORKSPACE: "nice-vip-assignment-1-2"  # Workspace specific to Account 2
+      TF_WORKSPACE: "nice-vip-assignment-1" 
 
     steps:
       - name: Checkout code
@@ -60,17 +33,10 @@ jobs:
         with:
           terraform_version: 1.11.4
 
-      - name: Terraform Init for Account 2
-        run: terraform init
-      
-      - name: Create Terraform Workspace for Account 2 if not exists
-        run: terraform workspace select ${{ env.TF_WORKSPACE }} || terraform workspace new ${{ env.TF_WORKSPACE }}
+      - name: Terraform Init
+        run: terraform init 
 
-      - name: Terraform Plan for Account 2
-        run: |
-          terraform plan \
-            -var="snowflake_account_name=${{ secrets.SNOWFLAKE_ACCOUNT_NAME_2 }}" \
-            -var="snowflake_user=${{ secrets.SNOWFLAKE_USER_2 }}" \
-            -var="snowflake_password=${{ secrets.SNOWFLAKE_PASSWORD_2 }}" \
-            -var="snowflake_organization_name=${{ secrets.SNOWFLAKE_ORGANIZATION_NAME_2 }}" \
-            -out=tfplan_account2.out
+      - name: Terraform Plan 
+        run: terraform plan
+          
+   
