@@ -8,22 +8,27 @@ terraform {
   }
 }
 
+variable "notify_users" {
+  type    = list(string)
+}
+
 resource "snowflake_resource_monitor" "account_usage_monitor" {
-  name                     = "ACCOUNT_USAGE_MONITOR"
-  provider                 = snowflake.accountadmin
-  credit_quota             = 100
-  notify_triggers          = [80]
-  suspend_trigger          = 90
+  name                      = "ACCOUNT_USAGE_MONITOR"
+  provider                  = snowflake.accountadmin
+  credit_quota              = 100
+  notify_triggers           = [80]
+  suspend_trigger           = 90
   suspend_immediate_trigger = 90
-  notify_users             = ["SAMIRWANKHEDE"]
+  notify_users              = var.notify_users
 }
 
 resource "snowflake_resource_monitor" "warehouse_usage_monitor" {
-  name                     = "WAREHOUSE_USAGE_MONITOR"
-  provider                 = snowflake.accountadmin
-  credit_quota             = 100
-  notify_triggers          = [80]
-  suspend_trigger         = 90
+  name                      = "WAREHOUSE_USAGE_MONITOR"
+  provider                  = snowflake.accountadmin
+  credit_quota              = 100
+  notify_triggers           = [80]
+  suspend_trigger           = 90
   suspend_immediate_trigger = 90
-  notify_users             = ["SAMIRWANKHEDE"]
+  notify_users              = var.notify_users
 }
+
