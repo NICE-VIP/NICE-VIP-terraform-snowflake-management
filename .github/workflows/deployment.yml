@@ -39,12 +39,5 @@ jobs:
       - name: Terraform Refresh
         run: terraform refresh 
 
-      - name: Terraform Import Existing Resources
-        run: |
-          terraform import 'module.databases.snowflake_schema.schemas["APP_DATA_DB"]' APP_DATA_DB.APP_DATA_DB_SCHEMA
-          terraform import 'module.databases.snowflake_schema.schemas["LOGS_DB"]' LOGS_DB.LOGS_DB_SCHEMA
-
-
-
       - name: Terraform Apply
         run: terraform apply -auto-approve

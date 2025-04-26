@@ -100,4 +100,13 @@ module "resource_monitors" {
   providers = {
     snowflake.accountadmin = snowflake.accountadmin
   }
+  notify_users = ["SAMIRWANKHEDE"]
+}
+
+module "resource_monitors_2" {
+  source = "./modules/resource_monitors"
+  providers = {
+    snowflake.accountadmin = snowflake.accountadmin_2
+  }
+  notify_users = ["Shreenath Bandivadekar"]
 }
