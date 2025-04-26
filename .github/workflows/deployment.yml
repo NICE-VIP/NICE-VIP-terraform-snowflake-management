@@ -7,7 +7,7 @@ on:
 
 jobs:
   terraform-apply:
-    name: Terraform Apply 
+    name: Terraform Apply
     runs-on: ubuntu-latest
     env:
       TF_VAR_snowflake_organization_name: ${{ secrets.SNOWFLAKE_ORGANIZATION_NAME }}
@@ -39,5 +39,12 @@ jobs:
       - name: Terraform Refresh
         run: terraform refresh 
 
+      - name: Terraform Import Existing Resources
+        run: |
+          terraform import module.resource_monitors.snowflake_resource_monitor.account_usage_monitor ACCOUNT_USAGE_MONITOR
+          terraform import module.resource_monitors.snowflake_resource_monitor.warehouse_usage_monitor WAREHOUSE_USAGE_MONITOR
+          terraform import module.databases.snowflake_schema.schemas["APP_DATA_DB"] APP_DATA_DB.APP_DATA_DB_SCHEMA
+          terraform import module.databases.snowflake_schema.schemas["LOGS_DB"] LOGS_DB.LOGS_DB_SCHEMA
+
       - name: Terraform Apply
-        run: terraform apply -auto-approve 
+        run: terraform apply -auto-approve
