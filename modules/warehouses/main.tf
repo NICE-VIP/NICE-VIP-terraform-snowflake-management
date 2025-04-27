@@ -21,7 +21,7 @@ resource "snowflake_warehouse" "infra_admin_wh" {
   auto_suspend           = 60
   auto_resume            = true
   initially_suspended    = true
-  resource_monitor       = var.warehouse_resource_monitor
+  # resource_monitor       = var.warehouse_resource_monitor // Privilege issue as resource monitor is made by account admin
   min_cluster_count      = 1
   max_cluster_count      = 10
   scaling_policy         = "STANDARD"
