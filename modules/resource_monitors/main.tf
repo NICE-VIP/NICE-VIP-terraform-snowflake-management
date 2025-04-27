@@ -8,10 +8,6 @@ terraform {
   }
 }
 
-variable "notify_users" {
-  type    = list(string)
-}
-
 resource "snowflake_resource_monitor" "account_usage_monitor" {
   name                      = "ACCOUNT_USAGE_MONITOR"
   provider                  = snowflake.accountadmin
@@ -32,3 +28,6 @@ resource "snowflake_resource_monitor" "warehouse_usage_monitor" {
   notify_users              = var.notify_users
 }
 
+output "warehouse_resource_monitor" {
+  value = snowflake_resource_monitor.warehouse_usage_monitor.fully_qualified_name
+}
