@@ -109,5 +109,5 @@ module "resource_monitors_2" {
   providers = {
     snowflake.accountadmin = snowflake.accountadmin_2
   }
-  notify_users = [] //add after email is verified
+  notify_users = ["Shreenath Bandivadekar"] 
 }
