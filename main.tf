@@ -76,6 +76,7 @@ module "warehouses" {
   source = "./modules/warehouses"
   read_only_role = "READ_ONLY_ROLE"
   data_admin_role = "DATA_ADMIN_ROLE"
+  warehouse_resource_monitor = module.resource_monitors.warehouse_resource_monitor
   providers = {
     snowflake.infra_admin = snowflake.infra_admin
   }
@@ -108,5 +109,5 @@ module "resource_monitors_2" {
   providers = {
     snowflake.accountadmin = snowflake.accountadmin_2
   }
-  notify_users = ["Shreenath Bandivadekar"]
+  notify_users = [] //add after email is verified
 }
