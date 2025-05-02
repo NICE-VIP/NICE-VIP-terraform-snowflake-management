@@ -26,4 +26,8 @@ USERADMIN – Manages users but not privileges. \
 PUBLIC – Default role with minimal access.
 
 ## Workflow Diagram
-![Workflow Diagram](./diagram/diagram_1.png)
+![Workflow Diagram](./diagrams/diagram_1.png)
+
+## Architecture Diagram
+![Architecture Diagram](./diagrams/diagram_2.png)
+
