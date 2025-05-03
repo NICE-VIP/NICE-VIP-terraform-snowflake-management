@@ -78,7 +78,8 @@ module "warehouses" {
   data_admin_role = "DATA_ADMIN_ROLE"
   warehouse_resource_monitor = module.resource_monitors.warehouse_resource_monitor
   providers = {
-    snowflake.infra_admin = snowflake.infra_admin
+    snowflake.infra_admin  = snowflake.infra_admin
+    snowflake.accountadmin = snowflake.accountadmin
   }
 }
 

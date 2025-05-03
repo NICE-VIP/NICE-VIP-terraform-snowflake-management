@@ -3,7 +3,7 @@ terraform {
     snowflake = {
       source  = "snowflake-labs/snowflake"
       version = "~> 0.87"
-      configuration_aliases = [ snowflake.infra_admin ]
+      configuration_aliases = [ snowflake.infra_admin, snowflake.accountadmin ]
     }
   }
 }
@@ -26,6 +26,18 @@ resource "snowflake_warehouse" "infra_admin_wh" {
   max_cluster_count      = 10
   scaling_policy         = "STANDARD"
 }
+
+resource "snowflake_warehouse" "existing_wh" {
+  provider = snowflake.accountadmin
+  name                   = "EXISTING_WAREHOUSE"
+  warehouse_size         = "XSMALL"
+  scaling_policy         = "STANDARD"
+  initially_suspended    = true
+  auto_suspend           = 300
+  min_cluster_count      = 1
+  max_cluster_count      = 1
+  auto_resume            = true
+} 
 
 # create grants on warehouse
 resource "snowflake_grant_privileges_to_account_role" "data_admin_data_processing_wh_privs" {
