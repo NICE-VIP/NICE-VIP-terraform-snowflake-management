@@ -3,7 +3,7 @@ terraform {
     snowflake = {
       source  = "snowflake-labs/snowflake"
       version = "~> 0.87"
-      configuration_aliases = [ snowflake.infra_admin ]
+      configuration_aliases = [ snowflake.infra_admin, snowflake.accountadmin ]
     }
   }
 }
@@ -25,6 +25,23 @@ resource "snowflake_warehouse" "infra_admin_wh" {
   min_cluster_count      = 1
   max_cluster_count      = 10
   scaling_policy         = "STANDARD"
+}
+
+resource "snowflake_warehouse" "existing_wh" {
+  provider = snowflake.accountadmin
+  name                   = "EXISTING_WAREHOUSE"
+  warehouse_size         = "XSMALL"
+  scaling_policy         = "STANDARD"
+  initially_suspended    = true
+  auto_suspend           = 300
+  min_cluster_count      = 1
+  max_cluster_count      = 1
+  auto_resume            = true
+} 
+
+import {
+  to = snowflake_warehouse.existing_wh
+  id = 154243636
 }
 
 # create grants on warehouse
