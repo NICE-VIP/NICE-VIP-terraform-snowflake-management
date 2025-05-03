@@ -31,3 +31,7 @@ PUBLIC – Default role with minimal access.
 ## Architecture Diagram
 ![Architecture Diagram](./diagrams/diagram_2.png)
 
+## Features:-
+
+- Supports Multiple Snowflake Accounts - The codebase is designed to provision resources across multiple Snowflake accounts, enabling scalable and flexible multi-environment deployments.
+- Plans based on pull requests - Terraform plans are automatically triggered on pull requests.
