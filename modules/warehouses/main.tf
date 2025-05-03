@@ -39,11 +39,6 @@ resource "snowflake_warehouse" "existing_wh" {
   auto_resume            = true
 } 
 
-import {
-  to = snowflake_warehouse.existing_wh
-  id = 154243636
-}
-
 # create grants on warehouse
 resource "snowflake_grant_privileges_to_account_role" "data_admin_data_processing_wh_privs" {
   for_each = toset(local.warehouse_names)
