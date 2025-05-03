@@ -34,4 +34,6 @@ PUBLIC – Default role with minimal access.
 ## Features:-
 
 - Supports Multiple Snowflake Accounts - The codebase is designed to provision resources across multiple Snowflake accounts, enabling scalable and flexible multi-environment deployments.
+- CI/CD - Github actions is implemented to automate integration, testing and provision of resources.
 - Plans based on pull requests - Terraform plans are automatically triggered on pull requests.
+- Apply based on merge on production branch - Terraform apply is automatically triggered on merging of pull requests.
