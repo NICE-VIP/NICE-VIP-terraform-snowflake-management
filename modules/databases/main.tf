@@ -30,12 +30,12 @@ resource "snowflake_database" "dbs" {
   comment  = each.value.comment
 }
 
-resource "snowflake_schema" "schemas" {
-  provider = snowflake.infra_admin
-  for_each = local.databases
-  database = each.key
-  name     = each.value.schema
-}
+# resource "snowflake_schema" "schemas" {
+#   provider = snowflake.infra_admin
+#   for_each = local.databases
+#   database = each.key
+#   name     = each.value.schema
+# }
 
 # # Grant privileges to data_admin
 # resource "snowflake_grant_privileges_to_account_role" "data_admin_db_privs" {
