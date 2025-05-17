@@ -58,7 +58,7 @@ module "roles" {
   providers = {
     snowflake.sysadmin       = snowflake.sysadmin
     snowflake.security_admin = snowflake.security_admin
-    # snowflake.infra_admin    = snowflake.infra_admin
+    snowflake.infra_admin    = snowflake.infra_admin
   }
 }
 
