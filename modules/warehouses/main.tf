@@ -26,7 +26,7 @@ resource "snowflake_warehouse" "infra_admin_wh" {
   scaling_policy         = "STANDARD"
 }
 
-# create grants on warehouse
+#create grants on warehouse
 resource "snowflake_grant_privileges_to_account_role" "data_admin_data_processing_wh_privs" {
   for_each = toset(local.warehouse_names)
   account_role_name = var.data_admin_role
