@@ -72,16 +72,15 @@ module "roles" {
 #   }
 # }
 
-# module "warehouses" {
-#   source = "./modules/warehouses"
-#   read_only_role = "READ_ONLY_ROLE"
-#   data_admin_role = "DATA_ADMIN_ROLE"
-#   warehouse_resource_monitor = module.resource_monitors.warehouse_resource_monitor
-#   providers = {
-#     snowflake.infra_admin  = snowflake.infra_admin
-#     snowflake.accountadmin = snowflake.accountadmin
-#   }
-# }
+module "warehouses" {
+  source = "./modules/warehouses"
+  read_only_role = "READ_ONLY_ROLE"
+  data_admin_role = "DATA_ADMIN_ROLE"
+  providers = {
+    snowflake.infra_admin  = snowflake.infra_admin
+    snowflake.accountadmin = snowflake.accountadmin
+  }
+}
 
 # module "network_policy" {
 #   source = "./modules/network_policy"
