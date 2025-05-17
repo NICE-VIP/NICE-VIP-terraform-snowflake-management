@@ -3,7 +3,7 @@ terraform {
     snowflake = {
       source  = "snowflake-labs/snowflake"
       version = "~> 0.87"
-      configuration_aliases = [  snowflake.security_admin, snowflake.sysadmin, ] //snowflake.infra_admin,
+      configuration_aliases = [ snowflake.infra_admin, snowflake.security_admin, snowflake.sysadmin, ] 
     }
   }
 }
