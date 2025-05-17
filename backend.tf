@@ -4,7 +4,7 @@ terraform {
     organization = "nice-vip" 
 
     workspaces { 
-      name = "nice-vip-assignment-1" 
+      name = "nice-vip-storage" 
     } 
   } 
 }

@@ -90,12 +90,12 @@ module "roles" {
 #   }
 # }
 
-module "network_policy_2" {
-  source = "./modules/network_policy"
-  providers = {
-    snowflake.accountadmin = snowflake.accountadmin_2
-  }
-}
+# module "network_policy_2" {
+#   source = "./modules/network_policy"
+#   providers = {
+#     snowflake.accountadmin = snowflake.accountadmin_2
+#   }
+# }
 
 # module "resource_monitors" {
 #   source = "./modules/resource_monitors"
@@ -105,10 +105,10 @@ module "network_policy_2" {
 #   notify_users = ["SAMIRWANKHEDE"]
 # }
 
-module "resource_monitors_2" {
-  source = "./modules/resource_monitors"
-  providers = {
-    snowflake.accountadmin = snowflake.accountadmin_2
-  }
-  notify_users = ["Shreenath Bandivadekar"] 
-}
+# module "resource_monitors_2" {
+#   source = "./modules/resource_monitors"
+#   providers = {
+#     snowflake.accountadmin = snowflake.accountadmin_2
+#   }
+#   notify_users = ["Shreenath Bandivadekar"] 
+# }
