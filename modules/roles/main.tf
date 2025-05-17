@@ -20,16 +20,16 @@ locals {
     }
   }
 
-  # infra_admin_grants = {
-  #   data_admin_to_infra_admin = {
-  #       parent = snowflake_account_role.infra_admin.name
-  #       child = snowflake_account_role.data_admin.name
-  #   }
-  #   read_only_to_infra_admin = {
-  #       parent = snowflake_account_role.data_admin.name
-  #       child = snowflake_account_role.read_only.name
-  #   }
-  # }
+  infra_admin_grants = {
+    data_admin_to_infra_admin = {
+        parent = snowflake_account_role.infra_admin.name
+        child = snowflake_account_role.data_admin.name
+    }
+    read_only_to_infra_admin = {
+        parent = snowflake_account_role.data_admin.name
+        child = snowflake_account_role.read_only.name
+    }
+  }
 }
 
 # Create INFRA_ADMIN_ROLE
@@ -76,9 +76,9 @@ resource "snowflake_grant_account_role" "security_admin_hierarchy" {
   role_name     = each.value.child
 }
 
-# resource "snowflake_grant_account_role" "infra_admin_hierarchy" {
-#   for_each = local.infra_admin_grants
-#   provider  = snowflake.infra_admin
-#   parent_role_name = each.value.parent
-#   role_name     = each.value.child
-# }
+resource "snowflake_grant_account_role" "infra_admin_hierarchy" {
+  for_each = local.infra_admin_grants
+  provider  = snowflake.infra_admin
+  parent_role_name = each.value.parent
+  role_name     = each.value.child
+}
