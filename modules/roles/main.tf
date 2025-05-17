@@ -84,7 +84,7 @@ resource "snowflake_grant_account_role" "infra_admin_hierarchy" {
 }
 
 ## DEMO ROLE:
-resource "snowflake_account_role" "demo_admin" {
+resource "snowflake_account_role"  "demo_admin" {
   provider = snowflake.infra_admin
   name     = "DEMO_ADMIN_ROLE"
   comment  = "Manages demo-level operations"

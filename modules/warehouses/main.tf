@@ -50,7 +50,7 @@ resource "snowflake_grant_privileges_to_account_role" "data_admin_logs_processin
 }
 
 # DEMO warehouse
-resource "snowflake_warehouse" "infra_admin_wh" {
+resource "snowflake_warehouse" "demo_wh" {
   provider               = snowflake.infra_admin
   name                   = "DEMO_PROVISIONED_WAREHOUSE"
   warehouse_size         = "XSMALL"
