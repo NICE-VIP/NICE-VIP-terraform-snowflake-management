@@ -21,16 +21,16 @@ locals {
     }
   }
 
-  infra_admin_grants = {
-    data_admin_to_infra_admin = {
-        parent = snowflake_account_role.infra_admin.name
-        child = snowflake_account_role.data_admin.name
-    }
-    read_only_to_infra_admin = {
-        parent = snowflake_account_role.data_admin.name
-        child = snowflake_account_role.read_only.name
-    }
-  }
+  # infra_admin_grants = {
+  #   data_admin_to_infra_admin = {
+  #       parent = snowflake_account_role.infra_admin.name
+  #       child = snowflake_account_role.data_admin.name
+  #   }
+  #   read_only_to_infra_admin = {
+  #       parent = snowflake_account_role.data_admin.name
+  #       child = snowflake_account_role.read_only.name
+  #   }
+  # }
 }
 
 # Create INFRA_ADMIN_ROLE
