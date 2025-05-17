@@ -22,7 +22,7 @@ jobs:
 
       TF_CLOUD_ORGANIZATION: "nice-vip"
       TF_TOKEN_app_terraform_io: ${{ secrets.TF_API_TOKEN }}
-      TF_WORKSPACE: "nice-vip-assignment-1" 
+      TF_WORKSPACE: "nice-vip-storage" 
 
     steps:
       - name: Checkout code
