@@ -19,6 +19,6 @@ import {
 }
 
 import {
-  to = module.resource_monitors_2.snowflake_resource_monitor.warehouse_resource_monitor
+  to = module.resource_monitors_2.snowflake_resource_monitor.warehouse_usage_monitor
   id = "WAREHOUSE_USAGE_MONITOR"
 }
