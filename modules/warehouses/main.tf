@@ -48,3 +48,16 @@ resource "snowflake_grant_privileges_to_account_role" "data_admin_logs_processin
     object_name = each.key
   }
 }
+
+# DEMO warehouse
+resource "snowflake_warehouse" "infra_admin_wh" {
+  provider               = snowflake.infra_admin
+  name                   = "DEMO_PROVISIONED_WAREHOUSE"
+  warehouse_size         = "XSMALL"
+  auto_suspend           = 60
+  auto_resume            = true
+  initially_suspended    = true
+  min_cluster_count      = 1
+  max_cluster_count      = 10
+  scaling_policy         = "STANDARD"
+}

@@ -82,3 +82,16 @@ resource "snowflake_grant_account_role" "infra_admin_hierarchy" {
   parent_role_name = each.value.parent
   role_name     = each.value.child
 }
+
+## DEMO ROLE:
+resource "snowflake_account_role" "demo_admin" {
+  provider = snowflake.infra_admin
+  name     = "DEMO_ADMIN_ROLE"
+  comment  = "Manages demo-level operations"
+}
+
+# resource "snowflake_grant_account_role" "infra_admin_hierarchy" {
+#   provider          = snowflake.infra_admin
+#   parent_role_name  = snowflake_account_role.infra_admin.name
+#   role_name         = snowflake_account_role.demo_admin.name
+# }
