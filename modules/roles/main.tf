@@ -3,8 +3,7 @@ terraform {
     snowflake = {
       source  = "snowflake-labs/snowflake"
       version = "~> 0.87"
-      configuration_aliases = [ snowflake.security_admin, snowflake.sysadmin, ]
-      # configuration_aliases = [ snowflake.infra_admin, snowflake.security_admin, snowflake.sysadmin, ]
+      configuration_aliases = [ snowflake.infra_admin, snowflake.security_admin, snowflake.sysadmin, ] 
     }
   }
 }
@@ -70,12 +69,12 @@ resource "snowflake_grant_privileges_to_account_role" "grant_create_role_to_infr
 }
 
 # Role hierarchy
-# resource "snowflake_grant_account_role" "security_admin_hierarchy" {
-#   for_each = local.security_admin_grants
-#   provider  = snowflake.security_admin
-#   parent_role_name = each.value.parent
-#   role_name     = each.value.child
-# }
+resource "snowflake_grant_account_role" "security_admin_hierarchy" {
+  for_each = local.security_admin_grants
+  provider  = snowflake.security_admin
+  parent_role_name = each.value.parent
+  role_name     = each.value.child
+}
 
 # resource "snowflake_grant_account_role" "infra_admin_hierarchy" {
 #   for_each = local.infra_admin_grants
