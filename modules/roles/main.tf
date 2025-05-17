@@ -90,8 +90,8 @@ resource "snowflake_account_role"  "demo_admin" {
   comment  = "Manages demo-level operations"
 }
 
-# resource "snowflake_grant_account_role" "infra_admin_hierarchy" {
-#   provider          = snowflake.infra_admin
-#   parent_role_name  = snowflake_account_role.infra_admin.name
-#   role_name         = snowflake_account_role.demo_admin.name
-# }
+resource "snowflake_grant_account_role" "infra_admin_demo_grant" {
+  provider          = snowflake.infra_admin
+  parent_role_name  = snowflake_account_role.infra_admin.name
+  role_name         = snowflake_account_role.demo_admin.name
+}
