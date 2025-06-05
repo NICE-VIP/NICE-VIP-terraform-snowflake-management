@@ -16,14 +16,14 @@ provider "snowflake" {
   password          = var.snowflake_password
 }
 
-# provider "snowflake" {
-#   alias      = "accountadmin_2"
-#   role       = "ACCOUNTADMIN"
-#   account_name      = var.snowflake_account_name_2
-#   organization_name = var.snowflake_organization_name_2
-#   user              = var.snowflake_user_2
-#   password          = var.snowflake_password_2
-# }
+provider "snowflake" {
+  alias      = "accountadmin_2"
+  role       = "ACCOUNTADMIN"
+  account_name      = var.snowflake_account_name_2
+  organization_name = var.snowflake_organization_name_2
+  user              = var.snowflake_user_2
+  password          = var.snowflake_password_2
+}
 
 provider "snowflake" {
   alias      = "sysadmin"
