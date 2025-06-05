@@ -81,7 +81,7 @@ resource "snowflake_warehouse" "existing_wh" {
   warehouse_size         = "XSMALL"
   scaling_policy         = "STANDARD"
   initially_suspended    = true
-  auto_suspend           = 300
+  auto_suspend           = 150
   min_cluster_count      = 1
   max_cluster_count      = 1
   auto_resume            = true
