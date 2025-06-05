@@ -61,3 +61,15 @@ resource "snowflake_warehouse" "demo_wh" {
   max_cluster_count      = 10
   scaling_policy         = "STANDARD"
 }
+
+resource "snowflake_warehouse" "demo_wh_new" {
+  provider               = snowflake.infra_admin
+  name                   = "DEMO_PROVISIONED_WAREHOUSE_CICD_TEST"
+  warehouse_size         = "XSMALL"
+  auto_suspend           = 60
+  auto_resume            = true
+  initially_suspended    = true
+  min_cluster_count      = 1
+  max_cluster_count      = 10
+  scaling_policy         = "STANDARD"
+}
