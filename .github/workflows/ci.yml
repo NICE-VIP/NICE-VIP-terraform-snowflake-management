@@ -34,11 +34,20 @@ jobs:
           terraform_version: 1.11.4
 
       - name: Terraform Init
-        run: terraform init 
+        run: terraform init | tee terraform-init.log
 
       - name: Terraform Refresh
-        run: terraform refresh 
+        run: terraform refresh | tee terraform-refresh.log
 
       - name: Terraform Plan 
-        run: terraform plan
+        run: terraform plan | tee terraform-plan.log
+
+      - name: Upload logs as artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: terraform-logs
+          path: |
+            terraform-init.log
+            terraform-refresh.log
+            terraform-plan.log
           
