@@ -64,7 +64,7 @@ resource "snowflake_warehouse" "demo_wh" {
 
 # Existing warehouse to be imported
 resource "snowflake_warehouse" "existing_wh" {
-  provider = snowflake.accountadmin
+  provider               = snowflake.accountadmin
   name                   = "EXISTING_WAREHOUSE"
   warehouse_size         = "XSMALL"
   scaling_policy         = "STANDARD"
