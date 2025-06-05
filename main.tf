@@ -16,14 +16,14 @@ provider "snowflake" {
   password          = var.snowflake_password
 }
 
-provider "snowflake" {
-  alias      = "accountadmin_2"
-  role       = "ACCOUNTADMIN"
-  account_name      = var.snowflake_account_name_2
-  organization_name = var.snowflake_organization_name_2
-  user              = var.snowflake_user_2
-  password          = var.snowflake_password_2
-}
+# provider "snowflake" {
+#   alias      = "accountadmin_2"
+#   role       = "ACCOUNTADMIN"
+#   account_name      = var.snowflake_account_name_2
+#   organization_name = var.snowflake_organization_name_2
+#   user              = var.snowflake_user_2
+#   password          = var.snowflake_password_2
+# }
 
 provider "snowflake" {
   alias      = "sysadmin"
@@ -89,12 +89,12 @@ module "network_policy" {
   }
 }
 
-module "network_policy_2" {
-  source = "./modules/network_policy"
-  providers = {
-    snowflake.accountadmin = snowflake.accountadmin_2
-  }
-}
+# module "network_policy_2" {
+#   source = "./modules/network_policy"
+#   providers = {
+#     snowflake.accountadmin = snowflake.accountadmin_2
+#   }
+# }
 
 module "resource_monitors" {
   source = "./modules/resource_monitors"
@@ -104,10 +104,10 @@ module "resource_monitors" {
   notify_users = ["SAMIRWANKHEDE"]
 }
 
-module "resource_monitors_2" {
-  source = "./modules/resource_monitors"
-  providers = {
-    snowflake.accountadmin = snowflake.accountadmin_2
-  }
-  notify_users = ["Shreenath Bandivadekar"] 
-}
+# module "resource_monitors_2" {
+#   source = "./modules/resource_monitors"
+#   providers = {
+#     snowflake.accountadmin = snowflake.accountadmin_2
+#   }
+#   notify_users = ["Shreenath Bandivadekar"] 
+# }
