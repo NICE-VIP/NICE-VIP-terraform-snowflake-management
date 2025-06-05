@@ -61,3 +61,16 @@ resource "snowflake_warehouse" "demo_wh" {
   max_cluster_count      = 10
   scaling_policy         = "STANDARD"
 }
+
+# Existing warehouse to be imported
+resource "snowflake_warehouse" "existing_wh" {
+  provider = snowflake.accountadmin
+  name                   = "EXISTING_WAREHOUSE"
+  warehouse_size         = "XSMALL"
+  scaling_policy         = "STANDARD"
+  initially_suspended    = true
+  auto_suspend           = 300
+  min_cluster_count      = 1
+  max_cluster_count      = 1
+  auto_resume            = true
+}
