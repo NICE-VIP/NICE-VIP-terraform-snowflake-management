@@ -37,7 +37,13 @@ jobs:
         run: terraform init 
 
       - name: Terraform Refresh
-        run: terraform refresh 
+        run: terraform refresh
 
       - name: Terraform Apply
-        run: terraform apply -auto-approve
+        run: terraform apply -auto-approve | tee terraform-apply.log
+
+      - name: Upload logs as artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: terraform-logs
+          path: terraform-apply.log
