@@ -40,4 +40,10 @@ jobs:
         run: terraform refresh 
 
       - name: Terraform Apply
-        run: terraform apply -auto-approve
+        run: terraform apply -auto-approve | tee -a tf-apply-log.txt
+
+      - name: Upload Terraform Apply Logs
+        uses: actions/upload-artifact@v4
+        with:
+          name: terraform-apply-logs
+          path: tf-apply-log.txt
