@@ -47,3 +47,15 @@ jobs:
         with:
           name: terraform-apply-logs
           path: tf-apply-log.txt
+        
+      - name: Build Docker Image
+        run: docker build -t tf-summary .
+
+      - name: Run Summary inside Docker
+        run: docker run --rm -v ${{ github.workspace }}:/app tf-summary
+
+      - name: Upload Summary
+        uses: actions/upload-artifact@v4
+        with:
+          name: terraform-summary
+          path: summary.txt
