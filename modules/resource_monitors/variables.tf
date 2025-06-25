@@ -1,3 +1,3 @@
-variable "notify_users" {
-  type    = list(string)
-}
+# variable "notify_users" {
+#   type    = list(string)
+# }

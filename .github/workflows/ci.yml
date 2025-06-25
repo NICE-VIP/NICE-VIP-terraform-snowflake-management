@@ -40,5 +40,14 @@ jobs:
         run: terraform refresh 
 
       - name: Terraform Plan 
-        run: terraform plan
+        run: terraform plan -out=tfplan | tee terraform-plan-${{ github.run_id }}.log
+      
+      - name: Send logs to monitoring VM
+        uses: appleboy/scp-action@v0.1.3
+        with:
+          host: ${{ secrets.MONITOR_VM_IP }}
+          username: ${{ secrets.MONITOR_VM_USER }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          source: terraform-plan-${{ github.run_id }}.log
+          target: "/opt/terraform-logs/"
           
