@@ -42,7 +42,7 @@ jobs:
       - name: Terraform Apply
         run: terraform apply -auto-approve | tee terraform-apply-${{ github.run_id }}.log
 
-      - name: Send logs to monitoring VM
+      - name: Send deployment logs to monitoring VM
         uses: appleboy/scp-action@v0.1.3
         with:
           host: ${{ secrets.MONITOR_VM_IP }}

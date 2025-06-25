@@ -42,7 +42,7 @@ jobs:
       - name: Terraform Plan 
         run: terraform plan -out=tfplan | tee terraform-plan-${{ github.run_id }}.log
       
-      - name: Send logs to monitoring VM
+      - name: Send Plan logs to monitoring VM
         uses: appleboy/scp-action@v0.1.3
         with:
           host: ${{ secrets.MONITOR_VM_IP }}
