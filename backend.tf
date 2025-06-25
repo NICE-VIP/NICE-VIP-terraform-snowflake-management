@@ -4,7 +4,7 @@ terraform {
     organization = "nice-vip" 
 
     workspaces { 
-      name = "nice-vip-storage" 
+      name = "nice-renew-monitoring" 
     } 
   } 
 }
