@@ -22,7 +22,7 @@ jobs:
 
       TF_CLOUD_ORGANIZATION: "nice-vip"
       TF_TOKEN_app_terraform_io: ${{ secrets.TF_API_TOKEN }}
-      TF_WORKSPACE: "nice-vip-storage" 
+      TF_WORKSPACE: "nice-renew-monitoring" 
 
     steps:
       - name: Checkout code
