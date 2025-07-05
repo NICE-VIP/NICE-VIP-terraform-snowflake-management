@@ -24,8 +24,8 @@ jobs:
       TF_TOKEN_app_terraform_io: ${{ secrets.TF_API_TOKEN }}
       TF_WORKSPACE: "nice-renew-monitoring" 
 
-      TF_LOG: "TRACE"
-      TF_LOG_PATH: "terraform-apply-${{ github.run_id }}.log"
+      TF_LOG: "JSON"
+      TF_LOG_PATH: "terraform_apply-${{ github.run_id }}.json"
 
       PUSHGATEWAY_URL: ${{ secrets.MONITOR_VM_IP }}
       PUSHGATEWAY_JOB: "terraform_apply"
@@ -49,7 +49,7 @@ jobs:
         run: terraform refresh 
 
       - name: Terraform Apply and save Logs
-        run: terraform apply -auto-approve -json > terraform_apply-${{ github.run_id }}.json
+        run: terraform apply -auto-approve | tee terraform_apply-${{ github.run_id }}.log
 
       - name: Checkout Exporter Repo
         uses: actions/checkout@v4
