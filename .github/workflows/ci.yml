@@ -38,8 +38,13 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Get Commit Message  
-        run: echo "COMMIT_MESSAGE=$(git log -1 --pretty=format:'%s')" >> $GITHUB_ENV
+      - name: Set Action Display Title
+        run: |
+          if [ "${{ github.event_name }}" == "pull_request" ]; then
+            echo "COMMIT_MESSAGE=${{ github.event.pull_request.title }}" >> $GITHUB_ENV
+          else
+            echo "COMMIT_MESSAGE=$(git log -1 --pretty=format:'%s')" >> $GITHUB_ENV
+          fi
 
       - name: Set up Terraform
         uses: hashicorp/setup-terraform@v2
