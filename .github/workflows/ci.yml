@@ -68,14 +68,22 @@ jobs:
           go build -o exporter .
           ./exporter
       
-      - name: Send Plan logs to monitoring VM
+      - name: Send Plan log to monitoring VM
         uses: appleboy/scp-action@v0.1.3
         with:
           host: ${{ secrets.MONITOR_VM_IP }}
           username: ${{ secrets.MONITOR_VM_USER }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
-          source: |
-            exporter/terraform-plan-${{ github.run_id }}.log
-            exporter/terraform_plan-${{ github.run_id }}.json
+          source: exporter/terraform-plan-${{ github.run_id }}.log
           target: "/opt/terraform-logs/"
+
+      - name: Send Plan JSON to monitoring VM
+        uses: appleboy/scp-action@v0.1.3
+        with:
+          host: ${{ secrets.MONITOR_VM_IP }}
+          username: ${{ secrets.MONITOR_VM_USER }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          source: exporter/terraform_plan-${{ github.run_id }}.json
+          target: "/opt/terraform-logs/"
+
           
