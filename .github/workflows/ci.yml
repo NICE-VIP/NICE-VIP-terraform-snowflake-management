@@ -51,7 +51,7 @@ jobs:
         run: terraform init 
 
       - name: Terraform Refresh
-        run: terraform refresh | tee terraform-refresh-${{ github.run_id }}.log
+        run: terraform plan -refresh-only -detailed-exitcode | tee terraform-refresh-${{ github.run_id }}.log
 
       - name: Terraform Plan and save Logs
         run: terraform plan -out=tfplan | tee terraform-plan-${{ github.run_id }}.log 
@@ -94,6 +94,6 @@ jobs:
           username: ${{ secrets.MONITOR_VM_USER }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           source: "exporter/terraform-plan-${{ github.run_id }}.json"
-          target: "/opt/terraform-logs/"
+          target: "/opt/terraform-logs/${{ github.run_id }}/"
 
           
