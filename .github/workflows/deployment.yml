@@ -22,7 +22,12 @@ jobs:
 
       TF_CLOUD_ORGANIZATION: "nice-vip"
       TF_TOKEN_app_terraform_io: ${{ secrets.TF_API_TOKEN }}
-      TF_WORKSPACE: "nice-renew-monitoring"  
+      TF_WORKSPACE: "nice-renew-monitoring" 
+
+      PUSHGATEWAY_URL: ${{ secrets.PUSHGATEWAY_URL }}
+      PUSHGATEWAY_JOB: "terraform_plan"
+      TERRAFORM_PLAN_PATH: ../terraform_plan.json
+      GITHUB_RUN_ID: ${{ github.run_id }} 
 
     steps:
       - name: Checkout code
@@ -41,6 +46,22 @@ jobs:
 
       - name: Terraform Apply
         run: terraform apply -auto-approve | tee terraform-apply-${{ github.run_id }}.log
+
+      - name: Generate Plan JSON
+        run: terraform show -json tfplan > terraform_plan.json
+
+      - name: Checkout Exporter Repo
+        uses: actions/checkout@v4
+        with:
+          repository: Samir-Wankhede/terraform-prometheus-pushgateway-exporter
+          path: exporter
+
+      - name: Run Go Metrics Exporter
+        run: |
+          cd exporter
+          go mod tidy
+          go build -o exporter .
+          ./exporter
 
       - name: Send deployment logs to monitoring VM
         uses: appleboy/scp-action@v0.1.3
