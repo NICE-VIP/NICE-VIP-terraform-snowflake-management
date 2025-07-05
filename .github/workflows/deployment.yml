@@ -49,7 +49,7 @@ jobs:
         run: terraform refresh 
 
       - name: Terraform Apply and save Logs
-        run: terraform apply -auto-approve | tee terraform_apply-${{ github.run_id }}.log
+        run: terraform apply -auto-approve | tee terraform-apply-${{ github.run_id }}.log
 
       - name: Checkout Exporter Repo
         uses: actions/checkout@v4
