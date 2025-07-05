@@ -26,7 +26,7 @@ jobs:
 
       PUSHGATEWAY_URL: ${{ secrets.MONITOR_VM_IP }}
       PUSHGATEWAY_JOB: "terraform_plan"
-      TERRAFORM_PLAN_PATH: ../terraform_plan-${{ github.run_id }}.json
+      TERRAFORM_PLAN_PATH: terraform_plan-${{ github.run_id }}.json
       GITHUB_RUN_ID: ${{ github.run_id }} 
 
     steps:
@@ -56,6 +56,11 @@ jobs:
           repository: Samir-Wankhede/terraform-prometheus-pushgateway-exporter
           path: exporter
 
+      - name: Move logs into exporter
+        run: |
+          mv terraform-plan-${{ github.run_id }}.log exporter/
+          mv terraform_plan-${{ github.run_id }}.json exporter/
+
       - name: Run Go Metrics Exporter
         run: |
           cd exporter
@@ -70,7 +75,7 @@ jobs:
           username: ${{ secrets.MONITOR_VM_USER }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           source: |
-            terraform-plan-${{ github.run_id }}.log
-            terraform_plan-${{ github.run_id }}.json
+            exporter/terraform-plan-${{ github.run_id }}.log
+            exporter/terraform_plan-${{ github.run_id }}.json
           target: "/opt/terraform-logs/"
           
