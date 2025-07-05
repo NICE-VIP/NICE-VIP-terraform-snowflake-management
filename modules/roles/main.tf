@@ -1,16 +1,16 @@
-# terraform {
-#   required_providers {
-#     snowflake = {
-#       source  = "snowflake-labs/snowflake"
-#       version = "~> 0.87"
-#       configuration_aliases = [ snowflake.security_admin, snowflake.sysadmin, ] #snowflake.infra_admin,
-#     }
-#   }
-# }
+terraform {
+  required_providers {
+    snowflake = {
+      source  = "snowflake-labs/snowflake"
+      version = "~> 0.87"
+      configuration_aliases = [ snowflake.security_admin, snowflake.sysadmin, ] #snowflake.infra_admin,
+    }
+  }
+}
 
-# # ============================
-# # Role Hierarchy Definitions
-# # ============================
+# ============================
+# Role Hierarchy Definitions
+# ============================
 
 # locals {
 #   security_admin_grants = {
@@ -20,24 +20,24 @@
 #     }
 #   }
 
-# #   infra_admin_grants = {
-# #     data_admin_to_infra_admin = {
-# #         parent = snowflake_account_role.infra_admin.name
-# #         child = snowflake_account_role.data_admin.name
-# #     }
-# #     read_only_to_infra_admin = {
-# #         parent = snowflake_account_role.data_admin.name
-# #         child = snowflake_account_role.read_only.name
-# #     }
-# #   }
+#   infra_admin_grants = {
+#     data_admin_to_infra_admin = {
+#         parent = snowflake_account_role.infra_admin.name
+#         child = snowflake_account_role.data_admin.name
+#     }
+#     read_only_to_infra_admin = {
+#         parent = snowflake_account_role.data_admin.name
+#         child = snowflake_account_role.read_only.name
+#     }
+#   }
 # }
 
-# # Create INFRA_ADMIN_ROLE
-# resource "snowflake_account_role" "infra_admin" {
-#   provider = snowflake.security_admin
-#   name    = "INFRA_ADMIN_ROLE"
-#   comment = "Manages infrastructure resources"
-# }
+# Create INFRA_ADMIN_ROLE
+resource "snowflake_account_role" "infra_admin" {
+  provider = snowflake.security_admin
+  name    = "INFRA_ADMIN_ROLE"
+  comment = "Manages infrastructure resources"
+}
 
 # # Create roles using INFRA_ADMIN_ROLE
 # resource "snowflake_account_role" "data_admin" {
