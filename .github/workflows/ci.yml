@@ -49,9 +49,11 @@ jobs:
 
       - name: Generate Plan JSON
         run: |
-          terraform show -json tfplan > terraform_plan-${{ github.run_id }}.json
+          echo "Generating Terraform Plan JSON"
+          terraform show -json tfplan > terraform_plan-${{ github.run_id }}.json 2>/dev/null
+
           echo "Validating JSON:"
-          head -n 10 terraform_plan-${{ github.run_id }}.json
+          head -n 5 terraform_plan-${{ github.run_id }}.json
           jq . terraform_plan-${{ github.run_id }}.json > /dev/null
 
       - name: Checkout Exporter Repo
