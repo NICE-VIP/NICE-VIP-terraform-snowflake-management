@@ -48,7 +48,7 @@ jobs:
         run: terraform plan -out=tfplan | tee terraform-plan-${{ github.run_id }}.log
 
       - name: Generate Plan JSON
-        run: terraform show -json tfplan | tee terraform_plan.json
+        run: terraform show -json tfplan | tee terraform_plan-${{ github.run_id }}.json
 
       - name: Checkout Exporter Repo
         uses: actions/checkout@v4
@@ -56,10 +56,8 @@ jobs:
           repository: Samir-Wankhede/terraform-prometheus-pushgateway-exporter
           path: exporter
 
-      - name: Move logs into exporter
-        run: |
-          mv terraform-plan-${{ github.run_id }}.log exporter/
-          mv terraform_plan-${{ github.run_id }}.json exporter/
+      - name: Move JSON into exporter
+        run: mv terraform_plan-${{ github.run_id }}.json exporter/
 
       - name: Run Go Metrics Exporter
         run: |
@@ -74,7 +72,7 @@ jobs:
           host: ${{ secrets.MONITOR_VM_IP }}
           username: ${{ secrets.MONITOR_VM_USER }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
-          source: exporter/terraform-plan-${{ github.run_id }}.log
+          source: terraform-plan-${{ github.run_id }}.log
           target: "/opt/terraform-logs/"
 
       - name: Send Plan JSON to monitoring VM
