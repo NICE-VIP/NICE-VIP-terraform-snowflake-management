@@ -83,7 +83,7 @@
 #   role_name     = each.value.child
 # }
 
-# ## DEMO ROLE:
+# # DEMO ROLE:
 # resource "snowflake_account_role"  "demo_admin" {
 #   provider = snowflake.infra_admin
 #   name     = "DEMO_ADMIN_ROLE"
