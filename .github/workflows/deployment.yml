@@ -24,9 +24,9 @@ jobs:
       TF_TOKEN_app_terraform_io: ${{ secrets.TF_API_TOKEN }}
       TF_WORKSPACE: "nice-renew-monitoring" 
 
-      PUSHGATEWAY_URL: ${{ secrets.PUSHGATEWAY_URL }}
+      PUSHGATEWAY_URL: ${{ secrets.MONITOR_VM_IP }}
       PUSHGATEWAY_JOB: "terraform_plan"
-      TERRAFORM_PLAN_PATH: ../terraform_plan.json
+      TERRAFORM_PLAN_PATH: ../terraform_plan-${{ github.run_id }}.json
       GITHUB_RUN_ID: ${{ github.run_id }} 
 
     steps:
@@ -48,7 +48,7 @@ jobs:
         run: terraform apply -auto-approve | tee terraform-apply-${{ github.run_id }}.log
 
       - name: Generate Plan JSON
-        run: terraform show -json tfplan > terraform_plan.json
+        run: terraform show -json tfplan > terraform_plan-${{ github.run_id }}.json
 
       - name: Checkout Exporter Repo
         uses: actions/checkout@v4
@@ -69,5 +69,7 @@ jobs:
           host: ${{ secrets.MONITOR_VM_IP }}
           username: ${{ secrets.MONITOR_VM_USER }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
-          source: terraform-apply-${{ github.run_id }}.log
+          source: |
+            terraform-apply-${{ github.run_id }}.log
+            terraform_plan-${{ github.run_id }}.json
           target: "/opt/terraform-logs/"
