@@ -48,7 +48,7 @@ jobs:
         run: terraform plan -out=tfplan | tee terraform-plan-${{ github.run_id }}.log
 
       - name: Generate Plan JSON
-        run: terraform show -json tfplan > terraform_plan-${{ github.run_id }}.json
+        run: terraform show -json tfplan | tee terraform_plan.json
 
       - name: Checkout Exporter Repo
         uses: actions/checkout@v4
