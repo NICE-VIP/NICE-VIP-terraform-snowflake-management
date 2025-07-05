@@ -50,7 +50,7 @@ jobs:
       - name: Generate Plan JSON
         run: |
           echo "Generating Terraform Plan JSON"
-          terraform show -json tfplan > raw_plan.json
+          terraform show -json tfplan > raw_plan.json 2>/dev/null
 
           # Clean the JSON: Remove any line(s) before the first JSON object
           sed -n '/^{/,$p' raw_plan.json > terraform_plan-${{ github.run_id }}.json
