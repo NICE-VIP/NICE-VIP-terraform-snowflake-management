@@ -44,12 +44,13 @@ jobs:
       - name: Terraform Refresh
         run: terraform refresh 
 
-      - name: Terraform Plan 
-        run: terraform plan -out=tfplan | tee terraform-plan-${{ github.run_id }}.log
+      - name: Terraform Plan
+        run: terraform plan -out=tfplan
 
-      - name: Generate Plan JSON
-        run: terraform show -no-color -json output.tfplan > terraform_plan-${{ github.run_id }}.json
-
+      - name: Save to Logs and Json
+        run: |
+          terraform show tfplan | tee terraform-plan-${{ github.run_id }}.log 
+          terraform show -json tfplan | tee terraform_plan-${{ github.run_id }}.json
 
       - name: Checkout Exporter Repo
         uses: actions/checkout@v4
