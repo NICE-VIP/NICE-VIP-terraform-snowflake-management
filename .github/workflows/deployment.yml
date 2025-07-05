@@ -24,17 +24,23 @@ jobs:
       TF_TOKEN_app_terraform_io: ${{ secrets.TF_API_TOKEN }}
       TF_WORKSPACE: "nice-renew-monitoring" 
 
-      TF_LOG: "JSON"
-      TF_LOG_PATH: "terraform_apply-${{ github.run_id }}.json"
-
       PUSHGATEWAY_URL: ${{ secrets.MONITOR_VM_IP }}
-      PUSHGATEWAY_JOB: "terraform_apply"
-      TERRAFORM_PLAN_PATH: terraform_apply-${{ github.run_id }}.json
+      PUSHGATEWAY_JOB: "terraform-apply"
+      TERRAFORM_PLAN_PATH: terraform-apply-plan-${{ github.run_id }}.json
+      TERRAFORM_PLAN_LOG_PATH: terraform-plan-${{ github.run_id }}.log
+      TERRAFORM_APPLY_LOG_PATH: terraform-apply-${{ github.run_id }}.log
+      TERRAFORM_REFRESH_LOG_PATH: terraform-refresh-${{ github.run_id }}.log
       GITHUB_RUN_ID: ${{ github.run_id }} 
 
     steps:
+      - name: Set start time
+        run: echo "TERRAFORM_START_TIME=$(date +%s)" >> $GITHUB_ENV
+
       - name: Checkout code
         uses: actions/checkout@v4
+
+      - name: Get Commit Message
+        run: echo "COMMIT_MESSAGE=$(git log -1 --pretty=format:'%s')" >> $GITHUB_ENV
 
       - name: Set up Terraform
         uses: hashicorp/setup-terraform@v2
@@ -46,10 +52,16 @@ jobs:
         run: terraform init 
 
       - name: Terraform Refresh
-        run: terraform refresh 
+        run: terraform plan -refresh-only -detailed-exitcode | tee terraform-refresh-${{ github.run_id }}.log
+
+      - name: Terraform Plan and save Logs
+        run: terraform plan -out=tfplan | tee terraform-plan-${{ github.run_id }}.log 
 
       - name: Terraform Apply and save Logs
-        run: terraform apply -auto-approve | tee terraform-apply-${{ github.run_id }}.log
+        run: terraform apply -auto-approve tfplan | tee terraform-apply-${{ github.run_id }}.log
+
+      - name: Terraform Plan JSON
+        run: terraform show -json tfplan | tee terraform-apply-plan-${{ github.run_id }}.json
 
       - name: Checkout Exporter Repo
         uses: actions/checkout@v4
@@ -58,7 +70,10 @@ jobs:
           path: exporter
 
       - name: Move JSON into exporter
-        run: mv terraform_apply-${{ github.run_id }}.json exporter/
+        run: |
+          mv terraform-apply-${{ github.run_id }}.log exporter/
+          mv terraform-apply-plan-${{ github.run_id }}.json exporter/
+          mv terraform-refresh-${{ github.run_id }}.log exporter/
 
       - name: Run Go Metrics Exporter
         run: |
@@ -73,14 +88,14 @@ jobs:
           host: ${{ secrets.MONITOR_VM_IP }}
           username: ${{ secrets.MONITOR_VM_USER }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
-          source: terraform-apply-${{ github.run_id }}.log
-          target: "/opt/terraform-logs/"
+          source: "exporter/terraform-apply-${{ github.run_id }}.log"
+          target: "/opt/terraform-logs/${{ github.run_id }}/"
 
-      - name: Send Apply JSON to monitoring VM
+      - name: Send Apply Plan JSON to monitoring VM
         uses: appleboy/scp-action@v0.1.3
         with:
           host: ${{ secrets.MONITOR_VM_IP }}
           username: ${{ secrets.MONITOR_VM_USER }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
-          source: exporter/terraform_apply-${{ github.run_id }}.json
-          target: "/opt/terraform-logs/"
+          source: "exporter/terraform-apply-plan-${{ github.run_id }}.json"
+          target: "/opt/terraform-logs/${{ github.run_id }}/"
