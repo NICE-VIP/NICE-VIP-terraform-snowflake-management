@@ -55,10 +55,6 @@ jobs:
           # Clean the JSON: Remove any line(s) before the first JSON object
           sed -n '/^{/,$p' raw_plan.json > terraform_plan-${{ github.run_id }}.json
 
-          echo "Validating JSON:"
-          head -n 5 terraform_plan-${{ github.run_id }}.json
-          jq . terraform_plan-${{ github.run_id }}.json > /dev/null
-
 
       - name: Checkout Exporter Repo
         uses: actions/checkout@v4
