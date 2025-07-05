@@ -37,6 +37,7 @@ jobs:
         uses: hashicorp/setup-terraform@v2
         with:
           terraform_version: 1.11.4
+          terraform_wrapper: false
 
       - name: Terraform Init
         run: terraform init 
@@ -44,13 +45,11 @@ jobs:
       - name: Terraform Refresh
         run: terraform refresh 
 
-      - name: Terraform Plan
-        run: terraform plan -out=tfplan
+      - name: Terraform Plan and save Logs
+        run: terraform plan -out=tfplan | tee terraform-plan-${{ github.run_id }}.log 
 
-      - name: Save to Logs and Json
-        run: |
-          terraform show tfplan | tee terraform-plan-${{ github.run_id }}.log 
-          terraform show -json tfplan | tee terraform_plan-${{ github.run_id }}.json
+      - name: Terraform Plan JSON
+        run: terraform show -json tfplan | tee terraform_plan-${{ github.run_id }}.json
 
       - name: Checkout Exporter Repo
         uses: actions/checkout@v4
