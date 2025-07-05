@@ -52,15 +52,15 @@ provider "snowflake" {
 #   password          = var.snowflake_password
 # }
 
-# module "roles" {
-#   source = "./modules/roles"
+module "roles" {
+  source = "./modules/roles"
 
-#   providers = {
-#     snowflake.sysadmin       = snowflake.sysadmin
-#     snowflake.security_admin = snowflake.security_admin
-#     # snowflake.infra_admin    = snowflake.infra_admin
-#   }
-# }
+  providers = {
+    snowflake.sysadmin       = snowflake.sysadmin
+    snowflake.security_admin = snowflake.security_admin
+    # snowflake.infra_admin    = snowflake.infra_admin
+  }
+}
 
 # module "databases" {
 #   source = "./modules/databases"
