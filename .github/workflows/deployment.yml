@@ -59,7 +59,7 @@ jobs:
       - name: Terraform Refresh
         run: |
           set -o pipefail
-          terraform plan -refresh-only -detailed-exitcode | tee terraform-refresh-${{ github.run_id }}.log
+          terraform plan -refresh-only | tee terraform-refresh-${{ github.run_id }}.log
 
       - name: Terraform Plan and save Logs
         run: |
