@@ -3,7 +3,7 @@ terraform {
     snowflake = {
       source  = "snowflake-labs/snowflake"
       version = "~> 0.87"
-      configuration_aliases = [ snowflake.security_admin, snowflake.sysadmin, ] #snowflake.infra_admin,
+      configuration_aliases = [ snowflake.infra_admin, snowflake.security_admin, snowflake.sysadmin, ]
     }
   }
 }
@@ -52,21 +52,21 @@ resource "snowflake_account_role" "infra_admin" {
 #   comment  = "Read-only access for analysts"
 # }
 
-# # Grant CREATE DATABASE and CREATE WAREHOUSE to INFRA_ADMIN_ROLE
-# resource "snowflake_grant_privileges_to_account_role" "grant_to_infra_admin" {
-#   provider          = snowflake.sysadmin
-#   account_role_name = snowflake_account_role.infra_admin.name
-#   privileges        = ["CREATE DATABASE", "CREATE WAREHOUSE"]
-#   on_account        = true
-# }
+# Grant CREATE DATABASE and CREATE WAREHOUSE to INFRA_ADMIN_ROLE
+resource "snowflake_grant_privileges_to_account_role" "grant_to_infra_admin" {
+  provider          = snowflake.sysadmin
+  account_role_name = snowflake_account_role.infra_admin.name
+  privileges        = ["CREATE DATABASE", "CREATE WAREHOUSE"]
+  on_account        = true
+}
 
-# # Grant CREATE ROLE privilege to INFRA_ADMIN_ROLE
-# resource "snowflake_grant_privileges_to_account_role" "grant_create_role_to_infra_admin" {
-#   provider          = snowflake.security_admin
-#   account_role_name = snowflake_account_role.infra_admin.name
-#   privileges        = ["CREATE ROLE"]
-#   on_account        = true
-# }
+# Grant CREATE ROLE privilege to INFRA_ADMIN_ROLE
+resource "snowflake_grant_privileges_to_account_role" "grant_create_role_to_infra_admin" {
+  provider          = snowflake.security_admin
+  account_role_name = snowflake_account_role.infra_admin.name
+  privileges        = ["CREATE ROLE"]
+  on_account        = true
+}
 
 # # Role hierarchy
 # resource "snowflake_grant_account_role" "security_admin_hierarchy" {

@@ -56,13 +56,19 @@ jobs:
         run: terraform init 
 
       - name: Terraform Refresh
-        run: terraform plan -refresh-only -detailed-exitcode | tee terraform-refresh-${{ github.run_id }}.log
+        run: |
+          set -o pipefail
+          terraform plan -refresh-only | tee terraform-refresh-${{ github.run_id }}.log
 
       - name: Terraform Plan and save Logs
-        run: terraform plan -out=tfplan | tee terraform-plan-${{ github.run_id }}.log 
+        run: |
+          set -o pipefail
+          terraform plan -out=tfplan | tee terraform-plan-${{ github.run_id }}.log 
 
       - name: Terraform Plan JSON
-        run: terraform show -json tfplan | tee terraform-plan-${{ github.run_id }}.json
+        run: |
+          set -o pipefail
+          terraform show -json tfplan | tee terraform-plan-${{ github.run_id }}.json
 
       - name: Checkout Exporter Repo
         uses: actions/checkout@v4
