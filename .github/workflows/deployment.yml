@@ -26,7 +26,7 @@ jobs:
 
       PUSHGATEWAY_URL: ${{ secrets.MONITOR_VM_IP }}
       PUSHGATEWAY_JOB: "terraform-apply"
-      TERRAFORM_PLAN_PATH: terraform-apply-plan-${{ github.run_id }}.json
+      TERRAFORM_PLAN_PATH: terraform-plan-${{ github.run_id }}.json
       TERRAFORM_PLAN_LOG_PATH: terraform-plan-${{ github.run_id }}.log
       TERRAFORM_APPLY_LOG_PATH: terraform-apply-${{ github.run_id }}.log
       TERRAFORM_REFRESH_LOG_PATH: terraform-refresh-${{ github.run_id }}.log
@@ -75,7 +75,7 @@ jobs:
       - name: Terraform Plan JSON
         run: |
           set -o pipefail
-          terraform show -json tfplan | tee terraform-apply-plan-${{ github.run_id }}.json
+          terraform show -json tfplan | tee terraform-plan-${{ github.run_id }}.json
 
       - name: Checkout Exporter Repo
         uses: actions/checkout@v4
@@ -86,7 +86,7 @@ jobs:
       - name: Move JSON into exporter
         run: |
           mv terraform-apply-${{ github.run_id }}.log exporter/
-          mv terraform-apply-plan-${{ github.run_id }}.json exporter/
+          mv terraform-plan-${{ github.run_id }}.json exporter/
           mv terraform-refresh-${{ github.run_id }}.log exporter/
 
       - name: Run Go Metrics Exporter
@@ -111,7 +111,7 @@ jobs:
           host: ${{ secrets.MONITOR_VM_IP }}
           username: ${{ secrets.MONITOR_VM_USER }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
-          source: "exporter/terraform-apply-plan-${{ github.run_id }}.json"
+          source: "exporter/terraform-plan-${{ github.run_id }}.json"
           target: "/opt/terraform-logs/${{ github.run_id }}/"
 
       - name: Send Apply Refresh Logs to monitoring VM
