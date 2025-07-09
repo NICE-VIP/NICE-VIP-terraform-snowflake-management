@@ -60,7 +60,7 @@ jobs:
       - name: Terraform Refresh
         run: |
           set -o pipefail
-          terraform plan -refresh-only | tee terraform-refresh-${{ github.run_id }}.log
+          terraform plan -refresh-only 2>&1 | tee terraform-refresh-${{ github.run_id }}.log
 
       - name: SCP Refresh Log if Refresh Fails
         if: failure()
@@ -75,7 +75,7 @@ jobs:
       - name: Terraform Plan and save Logs
         run: |
           set -o pipefail
-          terraform plan -out=tfplan | tee terraform-plan-${{ github.run_id }}.log 
+          terraform plan -out=tfplan 2>&1 | tee terraform-plan-${{ github.run_id }}.log 
 
       - name: SCP Plan Log if Plan Fails
         if: failure()
@@ -90,7 +90,7 @@ jobs:
       - name: Terraform Apply and save Logs
         run: |
           set -o pipefail
-          terraform apply -auto-approve tfplan | tee terraform-apply-${{ github.run_id }}.log
+          terraform apply -auto-approve tfplan 2>&1 | tee terraform-apply-${{ github.run_id }}.log
 
       - name: SCP Apply Log if Apply Fails
         if: failure()
