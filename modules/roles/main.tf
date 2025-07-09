@@ -39,18 +39,18 @@ resource "snowflake_account_role" "infra_admin" {
   comment = "Manages infrastructure resources"
 }
 
-# # Create roles using INFRA_ADMIN_ROLE
-# resource "snowflake_account_role" "data_admin" {
-#   provider = snowflake.infra_admin
-#   name     = "DATA_ADMIN_ROLE"
-#   comment  = "Manages data-level operations"
-# }
+# Create roles using INFRA_ADMIN_ROLE
+resource "snowflake_account_role" "data_admin" {
+  provider = snowflake.infra_admin
+  name     = "DATA_ADMIN_ROLE"
+  comment  = "Manages data-level operations"
+}
 
-# resource "snowflake_account_role" "read_only" {
-#   provider = snowflake.infra_admin
-#   name     = "READ_ONLY_ROLE"
-#   comment  = "Read-only access for analysts"
-# }
+resource "snowflake_account_role" "read_only" {
+  provider = snowflake.infra_admin
+  name     = "READ_ONLY_ROLE"
+  comment  = "Read-only access for analysts"
+}
 
 # Grant CREATE DATABASE and CREATE WAREHOUSE to INFRA_ADMIN_ROLE
 resource "snowflake_grant_privileges_to_account_role" "grant_to_infra_admin" {
