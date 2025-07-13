@@ -62,15 +62,15 @@ module "roles" {
   }
 }
 
-# module "databases" {
-#   source = "./modules/databases"
-#   read_only_role = "READ_ONLY_ROLE"
-#   data_admin_role = "DATA_ADMIN_ROLE"
-#   providers = {
-#     snowflake.sysadmin    = snowflake.sysadmin
-#     snowflake.infra_admin = snowflake.infra_admin
-#   }
-# }
+module "databases" {
+  source = "./modules/databases"
+  # read_only_role = "READ_ONLY_ROLE"
+  # data_admin_role = "DATA_ADMIN_ROLE"
+  providers = {
+    snowflake.sysadmin    = snowflake.sysadmin
+    snowflake.infra_admin = snowflake.infra_admin
+  }
+}
 
 module "warehouses" {
   source = "./modules/warehouses"
@@ -96,13 +96,13 @@ module "network_policy" {
 #   }
 # }
 
-# module "resource_monitors" {
-#   source = "./modules/resource_monitors"
-#   providers = {
-#     snowflake.accountadmin = snowflake.accountadmin
-#   }
-#   notify_users = ["SAMIRWANKHEDE"]
-# }
+module "resource_monitors" {
+  source = "./modules/resource_monitors"
+  providers = {
+    snowflake.accountadmin = snowflake.accountadmin
+  }
+  notify_users = ["SAMIRWANKHEDE"]
+}
 
 # module "resource_monitors_2" {
 #   source = "./modules/resource_monitors"
