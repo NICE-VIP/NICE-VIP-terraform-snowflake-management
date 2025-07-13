@@ -49,40 +49,40 @@ resource "snowflake_grant_privileges_to_account_role" "data_admin_logs_processin
   }
 }
 
-# # DEMO warehouse
-# resource "snowflake_warehouse" "demo_wh" {
-#   provider               = snowflake.infra_admin
-#   name                   = "DEMO_PROVISIONED_WAREHOUSE"
-#   warehouse_size         = "XSMALL"
-#   auto_suspend           = 60
-#   auto_resume            = true
-#   initially_suspended    = true
-#   min_cluster_count      = 1
-#   max_cluster_count      = 10
-#   scaling_policy         = "STANDARD"
-# }
+# DEMO warehouses
+resource "snowflake_warehouse" "demo_wh" {
+  provider               = snowflake.infra_admin
+  name                   = "DEMO_PROVISIONED_WAREHOUSE"
+  warehouse_size         = "XSMALL"
+  auto_suspend           = 60
+  auto_resume            = true
+  initially_suspended    = true
+  min_cluster_count      = 1
+  max_cluster_count      = 10
+  scaling_policy         = "STANDARD"
+}
 
-# resource "snowflake_warehouse" "demo_wh_new" {
-#   provider               = snowflake.infra_admin
-#   name                   = "DEMO_PROVISIONED_WAREHOUSE_CICD_TEST"
-#   warehouse_size         = "XSMALL"
-#   auto_suspend           = 60
-#   auto_resume            = true
-#   initially_suspended    = true
-#   min_cluster_count      = 1
-#   max_cluster_count      = 10
-#   scaling_policy         = "STANDARD"
-# }
+resource "snowflake_warehouse" "demo_wh_new" {
+  provider               = snowflake.infra_admin
+  name                   = "DEMO_PROVISIONED_WAREHOUSE_CICD_TEST"
+  warehouse_size         = "XSMALL"
+  auto_suspend           = 60
+  auto_resume            = true
+  initially_suspended    = true
+  min_cluster_count      = 1
+  max_cluster_count      = 10
+  scaling_policy         = "STANDARD"
+}
 
-# # existing warehouse to be imported
-# resource "snowflake_warehouse" "existing_wh" {
-#   provider = snowflake.accountadmin
-#   name                   = "EXISTING_WAREHOUSE"
-#   warehouse_size         = "XSMALL"
-#   scaling_policy         = "STANDARD"
-#   initially_suspended    = true
-#   auto_suspend           = 150
-#   min_cluster_count      = 1
-#   max_cluster_count      = 1
-#   auto_resume            = true
-# }
+# existing warehouse to be imported
+resource "snowflake_warehouse" "existing_wh" {
+  provider = snowflake.accountadmin
+  name                   = "EXISTING_WAREHOUSE"
+  warehouse_size         = "XSMALL"
+  scaling_policy         = "STANDARD"
+  initially_suspended    = true
+  auto_suspend           = 150
+  min_cluster_count      = 1
+  max_cluster_count      = 1
+  auto_resume            = true
+}
