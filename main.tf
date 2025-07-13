@@ -64,8 +64,8 @@ module "roles" {
 
 module "databases" {
   source = "./modules/databases"
-  # read_only_role = "READ_ONLY_ROLE"
-  # data_admin_role = "DATA_ADMIN_ROLE"
+  read_only_role = "READ_ONLY_ROLE"
+  data_admin_role = "DATA_ADMIN_ROLE"
   providers = {
     snowflake.sysadmin    = snowflake.sysadmin
     snowflake.infra_admin = snowflake.infra_admin
