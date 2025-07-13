@@ -96,13 +96,13 @@ module "network_policy" {
 #   }
 # }
 
-# module "resource_monitors" {
-#   source = "./modules/resource_monitors"
-#   providers = {
-#     snowflake.accountadmin = snowflake.accountadmin
-#   }
-#   notify_users = ["SAMIRWANKHEDE"]
-# }
+module "resource_monitors" {
+  source = "./modules/resource_monitors"
+  providers = {
+    snowflake.accountadmin = snowflake.accountadmin
+  }
+  notify_users = ["SAMIRWANKHEDE"]
+}
 
 # module "resource_monitors_2" {
 #   source = "./modules/resource_monitors"
