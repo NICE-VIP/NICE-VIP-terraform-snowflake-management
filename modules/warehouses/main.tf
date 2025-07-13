@@ -27,27 +27,27 @@ resource "snowflake_warehouse" "infra_admin_wh" {
 }
 
 #create grants on warehouse
-# resource "snowflake_grant_privileges_to_account_role" "data_admin_data_processing_wh_privs" {
-#   for_each = toset(local.warehouse_names)
-#   account_role_name = var.data_admin_role
-#   provider = snowflake.infra_admin
-#   privileges     = ["USAGE"]
-#   on_account_object {
-#     object_type = "WAREHOUSE"
-#     object_name = each.key
-#   }
-# }
+resource "snowflake_grant_privileges_to_account_role" "data_admin_data_processing_wh_privs" {
+  for_each = toset(local.warehouse_names)
+  account_role_name = var.data_admin_role
+  provider = snowflake.infra_admin
+  privileges     = ["USAGE"]
+  on_account_object {
+    object_type = "WAREHOUSE"
+    object_name = each.key
+  }
+}
 
-# resource "snowflake_grant_privileges_to_account_role" "data_admin_logs_processing_wh_privs" {
-#   for_each = toset(local.warehouse_names)
-#   account_role_name = var.read_only_role
-#   provider = snowflake.infra_admin
-#   privileges     = ["USAGE"]
-#   on_account_object {
-#     object_type = "WAREHOUSE"
-#     object_name = each.key
-#   }
-# }
+resource "snowflake_grant_privileges_to_account_role" "data_admin_logs_processing_wh_privs" {
+  for_each = toset(local.warehouse_names)
+  account_role_name = var.read_only_role
+  provider = snowflake.infra_admin
+  privileges     = ["USAGE"]
+  on_account_object {
+    object_type = "WAREHOUSE"
+    object_name = each.key
+  }
+}
 
 # # DEMO warehouse
 # resource "snowflake_warehouse" "demo_wh" {
